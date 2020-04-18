@@ -38,7 +38,7 @@ namespace abremir.postcrossing.engine.Repositories
             {
                 if (string.IsNullOrWhiteSpace(postcrossingEvent.RawEvent))
                 {
-                    result.Add(null);
+                    continue;
                 }
 
                 postcrossingEvent.Timestamp = DateTimeOffset.Now.ToHundredthOfSecond();

@@ -6,6 +6,7 @@
         {
             serviceCollection
                 .AddServices()
+                .AddRepositories()
                 .AddClients();
 
             return serviceCollection;

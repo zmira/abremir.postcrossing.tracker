@@ -2,8 +2,76 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:progRing="clr-namespace:AvaloniaProgressRing;assembly=AvaloniaProgressRing"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="abremir.postcrossing.tracker.MainWindow"
-        Title="abremir.postcrossing.tracker">
-    Welcome to Avalonia!
+        Title="Postcrossing Tracker"
+        Icon="/Assets/postcrossing.ico"
+        Padding="5">
+
+  <Border BorderBrush="Black" BorderThickness="1" Padding="5">
+    <Grid>
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="*" />
+        <ColumnDefinition Width="*" />
+      </Grid.ColumnDefinitions>
+      <Grid.RowDefinitions>
+        <RowDefinition Height="Auto" />
+        <RowDefinition Height="Auto" />
+        <RowDefinition Height="*" />
+        <RowDefinition Height="Auto" />
+      </Grid.RowDefinitions>
+
+      <ToggleButton IsChecked="False" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" x:Name="PersistData">Persist data</ToggleButton>
+
+      <progRing:ProgressRing Width="25" Height="25" IsActive="False" HorizontalAlignment="Right" VerticalAlignment="Top" Foreground="Green" Grid.Row="0" Grid.Column="2" x:Name="ProgressRing" />
+
+      <TextBlock Grid.Row="1" Grid.Column="0" Margin="0,5,0,0">Sending:</TextBlock>
+      <ListBox Items="{Binding PostcrossingEventsSend}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="0" Grid.Row="2" Margin="0,0,5,0">
+        <ListBox.ItemTemplate>
+          <DataTemplate>
+            <Border BorderBrush="Black" BorderThickness="1" CornerRadius="4" Padding="4">
+              <StackPanel Orientation="Horizontal">
+                <TextBlock Text="{Binding User.Name}"/>
+                <TextBlock Text="/"/>
+                <TextBlock Text="{Binding User.Country.Name}"/>
+                <TextBlock Text=" sending to "/>
+                <TextBlock Text="{Binding ToCountry.Name}"/>
+              </StackPanel>
+            </Border>
+          </DataTemplate>
+        </ListBox.ItemTemplate>
+      </ListBox>
+
+      <TextBlock Grid.Row="1" Grid.Column="1" Margin="0,5,0,0">Registered:</TextBlock>
+      <ListBox Items="{Binding PostcrossingEventsRegister}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="1" Grid.Row="2">
+        <ListBox.ItemTemplate>
+          <DataTemplate>
+            <Border BorderBrush="Black" BorderThickness="1" CornerRadius="4" Padding="4">
+              <StackPanel Orientation="Horizontal">
+                <TextBlock Text="{Binding User.Name}"/>
+                <TextBlock Text="/"/>
+                <TextBlock Text="{Binding User.Country.Name}"/>
+                <TextBlock Text=" registred "/>
+                <TextBlock Text="{Binding Postcard.PostcardId}"/>
+                <TextBlock Text=" from "/>
+                <TextBlock Text="{Binding FromUser.Name}"/>
+                <TextBlock Text="/"/>
+                <TextBlock Text="{Binding FromUser.Country.Name}"/>
+              </StackPanel>
+            </Border>
+          </DataTemplate>
+        </ListBox.ItemTemplate>
+      </ListBox>
+
+      <Slider x:Name="RefreshFrequency" Orientation="Horizontal" Minimum="1" Maximum="60" TickFrequency="1" IsSnapToTickEnabled="True" SmallChange="5" LargeChange="10" Value="5" Grid.Row="3" Grid.Column="0" />
+      <StackPanel Orientation="Horizontal" Grid.Column="2" Grid.Row="3">
+        <TextBlock>Refresh frequency:</TextBlock>
+        <TextBlock Text="{Binding ElementName=RefreshFrequency,Path=Value}" Margin="5,0,0,0"></TextBlock>
+        <TextBlock>s</TextBlock>
+      </StackPanel>
+
+      <ToggleButton IsChecked="False" Grid.Column="1" Grid.Row="3" HorizontalAlignment="Right" Margin="0,5,0,0" x:Name="StartTracking">Start Tracking</ToggleButton>
+    </Grid>
+  </Border>
 </Window>

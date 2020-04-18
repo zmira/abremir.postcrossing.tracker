@@ -1,11 +1,21 @@
 ﻿using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace abremir.postcrossing.tracker
 {
     public class App : Application
     {
+        public App()
+        {
+            var serviceCollection = new ServiceCollection();
+
+            PostcrossingEngineRegistration.RegisterPostcrossingEngine(serviceCollection);
+
+            ServiceProvider = serviceCollection.BuildServiceProvider();
+        }
+
         public override void Initialize()
         {
             AvaloniaXamlLoader.Load(this);
@@ -20,5 +30,7 @@ namespace abremir.postcrossing.tracker
 
             base.OnFrameworkInitializationCompleted();
         }
+
+        public static ServiceProvider ServiceProvider { get; set; }
     }
 }

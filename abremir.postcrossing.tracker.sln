@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "abremir.postcrossing.tracke
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "abremir.postcrossing.engine", "abremir.postcrossing.engine\abremir.postcrossing.engine.csproj", "{2F8E0A7E-39C7-460B-A83D-D6D32182CC5F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "abremir.postcrossing.engine.tests", "abremir.postcrossing.tracker.tests\abremir.postcrossing.engine.tests.csproj", "{02E4E34A-5F6C-40BE-AD0C-8CAA81F39E69}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "abremir.postcrossing.engine.tests", "abremir.postcrossing.engine.tests\abremir.postcrossing.engine.tests.csproj", "{02E4E34A-5F6C-40BE-AD0C-8CAA81F39E69}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

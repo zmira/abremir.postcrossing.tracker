@@ -112,39 +112,28 @@ namespace abremir.postcrossing.engine.Repositories
             {
                 return repository
                     .Query<Register>(PostcrossingTrackerConstants.EventCollectionName)
-                    .Include(register => register.FromUser)
-                    .Include(register => register.FromUser.Country)
-                    .Include(register => register.User)
-                    .Include(register => register.User.Country)
-                    .Include(register => register.Postcard)
-                    .Include(register => register.Postcard.Country) as ILiteQueryable<T>;
+                    .IncludeAll() as ILiteQueryable<T>;
             }
 
             if (typeof(T) == typeof(Send))
             {
                 return repository
                     .Query<Send>(PostcrossingTrackerConstants.EventCollectionName)
-                    .Include(send => send.User)
-                    .Include(send => send.User.Country)
-                    .Include(send => send.ToCountry) as ILiteQueryable<T>;
+                    .IncludeAll() as ILiteQueryable<T>;
             }
 
             if (typeof(T) == typeof(SignUp))
             {
                 return repository
                     .Query<SignUp>(PostcrossingTrackerConstants.EventCollectionName)
-                    .Include(signUp => signUp.User)
-                    .Include(signUp => signUp.User.Country) as ILiteQueryable<T>;
+                    .IncludeAll() as ILiteQueryable<T>;
             }
 
             if (typeof(T) == typeof(Upload))
             {
                 return repository
                     .Query<Upload>(PostcrossingTrackerConstants.EventCollectionName)
-                    .Include(upload => upload.User)
-                    .Include(upload => upload.User.Country)
-                    .Include(upload => upload.Postcard)
-                    .Include(upload => upload.Postcard.Country) as ILiteQueryable<T>;
+                    .IncludeAll() as ILiteQueryable<T>;
             }
 
             return repository

@@ -63,7 +63,7 @@ namespace abremir.postcrossing.engine.Repositories
         {
             return repository
                 .Query<User>(PostcrossingTrackerConstants.UserCollectionName)
-                .Include(user => user.Country);
+                .IncludeAll();
         }
     }
 }

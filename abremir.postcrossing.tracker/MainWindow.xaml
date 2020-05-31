@@ -52,7 +52,7 @@
                 <TextBlock Text="{Binding User.Name}"/>
                 <TextBlock Text="/"/>
                 <TextBlock Text="{Binding User.Country.Name}"/>
-                <TextBlock Text=" registred "/>
+                <TextBlock Text=" registered "/>
                 <TextBlock Text="{Binding Postcard.PostcardId}"/>
                 <TextBlock Text=" from "/>
                 <TextBlock Text="{Binding FromUser.Name}"/>

@@ -24,7 +24,7 @@
 
       <ToggleSwitch OnContent="Persist data" OffContent="Don't persist data" IsChecked="False" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" x:Name="PersistData" />
 
-      <!--<progRing:ProgressRing Width="25" Height="25" IsActive="False" HorizontalAlignment="Right" VerticalAlignment="Top" Foreground="Green" Grid.Row="0" Grid.Column="2" x:Name="ProgressRing" />-->
+      <progRing:ProgressRing Width="25" Height="25" IsActive="False" HorizontalAlignment="Right" VerticalAlignment="Top" Foreground="Green" Grid.Row="0" Grid.Column="2" x:Name="ProgressRing" />
 
       <Label Grid.Row="1" Grid.Column="0" Margin="0,5,0,0">Sending:</Label>
       <ListBox Items="{Binding PostcrossingEventsSend}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="0" Grid.Row="2" Margin="0,0,5,0">

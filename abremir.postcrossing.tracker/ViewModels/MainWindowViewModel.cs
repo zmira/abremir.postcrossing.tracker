@@ -5,7 +5,7 @@ using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Interactivity;
 using Avalonia.Threading;
-using AvaloniaProgressRing;
+//using AvaloniaProgressRing;
 using Microsoft.Extensions.DependencyInjection;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -22,7 +22,7 @@ namespace abremir.postcrossing.tracker.ViewModels
 
         private readonly ToggleButton _persistToggle;
         private readonly ToggleButton _trackingToggle;
-        private readonly ProgressRing _progressRing;
+        //private readonly ProgressRing _progressRing;
         private readonly Slider _frequencySlider;
         private readonly IPostcrossingEventService _postcrossingEventService;
         private readonly IPostcrossingEngineSettingsService _postcrossingEngineSettingsService;
@@ -33,12 +33,12 @@ namespace abremir.postcrossing.tracker.ViewModels
         public MainWindowViewModel(
             ToggleButton persistToggle,
             ToggleButton trackingToggle,
-            ProgressRing progressRing,
+            //ProgressRing progressRing,
             Slider frequencySlider)
         {
             _persistToggle = persistToggle;
             _trackingToggle = trackingToggle;
-            _progressRing = progressRing;
+            //_progressRing = progressRing;
             _frequencySlider = frequencySlider;
 
             _persistToggle.Click += OnPersistToggleClick;
@@ -96,7 +96,7 @@ namespace abremir.postcrossing.tracker.ViewModels
         private async void GetEvents()
         {
             await _semaphore.WaitAsync();
-            await Dispatcher.UIThread.InvokeAsync(() => _progressRing.IsActive = true);
+            //await Dispatcher.UIThread.InvokeAsync(() => _progressRing.IsActive = true);
 
             foreach (var @event in await _postcrossingEventService.GetLatestEventsAsync())
             {
@@ -111,7 +111,7 @@ namespace abremir.postcrossing.tracker.ViewModels
                 }
             }
 
-            await Dispatcher.UIThread.InvokeAsync(() => _progressRing.IsActive = false);
+            //await Dispatcher.UIThread.InvokeAsync(() => _progressRing.IsActive = false);
             _semaphore.Release();
         }
     }

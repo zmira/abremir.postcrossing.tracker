@@ -22,7 +22,7 @@ namespace abremir.postcrossing.engine.Extensions
 
             if (string.IsNullOrWhiteSpace(name))
             {
-                name = countryElement.Attribute("title").Value.Split(' ')[0];
+                name = countryElement.Attribute("title").Value.Replace("flag", string.Empty).Trim();
             }
 
             var code = countryElement.Attribute("href").Value.Split('/')[2];

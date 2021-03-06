@@ -22,11 +22,11 @@
         <RowDefinition Height="Auto" />
       </Grid.RowDefinitions>
 
-      <ToggleButton IsChecked="False" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" x:Name="PersistData">Persist data</ToggleButton>
+      <ToggleSwitch OnContent="Persist data" OffContent="Don't persist data" IsChecked="False" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" x:Name="PersistData" />
 
       <progRing:ProgressRing Width="25" Height="25" IsActive="False" HorizontalAlignment="Right" VerticalAlignment="Top" Foreground="Green" Grid.Row="0" Grid.Column="2" x:Name="ProgressRing" />
 
-      <TextBlock Grid.Row="1" Grid.Column="0" Margin="0,5,0,0">Sending:</TextBlock>
+      <Label Grid.Row="1" Grid.Column="0" Margin="0,5,0,0">Sending:</Label>
       <ListBox Items="{Binding PostcrossingEventsSend}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="0" Grid.Row="2" Margin="0,0,5,0">
         <ListBox.ItemTemplate>
           <DataTemplate>
@@ -43,7 +43,7 @@
         </ListBox.ItemTemplate>
       </ListBox>
 
-      <TextBlock Grid.Row="1" Grid.Column="1" Margin="0,5,0,0">Registered:</TextBlock>
+      <Label Grid.Row="1" Grid.Column="1" Margin="0,5,0,0">Registered:</Label>
       <ListBox Items="{Binding PostcrossingEventsRegister}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="1" Grid.Row="2">
         <ListBox.ItemTemplate>
           <DataTemplate>
@@ -71,7 +71,7 @@
         <TextBlock>s</TextBlock>
       </StackPanel>
 
-      <ToggleButton IsChecked="False" Grid.Column="1" Grid.Row="3" HorizontalAlignment="Right" Margin="0,5,0,0" x:Name="StartTracking">Start Tracking</ToggleButton>
+      <ToggleSwitch OnContent="Tracking" OffContent="Not tracking" IsChecked="False" Grid.Column="1" Grid.Row="3" HorizontalAlignment="Right" Margin="0,5,0,0" x:Name="StartTracking" />
     </Grid>
   </Border>
 </Window>

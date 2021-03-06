@@ -63,7 +63,6 @@ namespace abremir.postcrossing.tracker.ViewModels
 
             if (startTracking)
             {
-                toggleButton.Content = "Stop Tracking";
                 GetEvents();
                 _timer = new Timer(_frequencySlider.Value * 1000);
                 _timer.Elapsed += Timer_Elapsed;
@@ -71,7 +70,6 @@ namespace abremir.postcrossing.tracker.ViewModels
             }
             else
             {
-                toggleButton.Content = "Start Tracking";
                 _timer?.Stop();
                 _timer?.Dispose();
                 _timer = null;

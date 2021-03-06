@@ -4,16 +4,16 @@ namespace abremir.postcrossing.engine.Assets
 {
     internal static class PostcrossingEventRegex
     {
-        // <a href="/country/US"><i title="U.S.A." class="flag flag-US"></i></a> <a href="/user/rangermom">rangermom</a> received a <a href="/postcards/CA-724761">postcard</a> from <a href="/country/CA"><i title="Canada" class="flag flag-CA"></i></a> <a href="/user/green-eyes">green-eyes</a>
+        // <a title=\"France flag\" href=\"/country/FR\"><i class=\"flag flag-FR\"></i></a> <a href=\"/user/Steve2006\">Steve2006</a> received a <a href=\"/postcards/RU-8231660\">postcard</a> from <a title=\"Russia flag\" href=\"/country/RU\"><i class=\"flag flag-RU\"></i></a> <a href=\"/user/Annakam41\">Annakam41</a>
         public static readonly Regex Register = new Regex(@"^(\<a.+\/a\>) (\<a.+\/a\>) received a (\<a.+\>)postcard\<\/a\> from (\<a.+\/a\>) (\<a.+\/a\>)$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
-        // <a href="/country/TW"><i title="Taiwan" class="flag flag-TW"></i></a> <a href="/user/Cloris_Hsieh">Cloris_Hsieh</a> sent a postcard to <a href="/country/PT"><i title="Portugal" class="flag flag-PT"></i></a> <a href="/country/PT">Portugal</a>
-        public static readonly Regex Send = new Regex(@"^(\<a.+\/a\>) (\<a.+\/a\>) sent a postcard to (\<a.+\/a\>) (\<a.+\/a\>)$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+        // <a title=\"U.S.A. flag\" href=\"/country/US\"><i class=\"flag flag-US\"></i></a> <a href=\"/user/smgray01\">smgray01</a> sent a postcard to <i title=\"Russia flag\" class=\"flag flag-RU\"></i> <a href=\"/country/RU\">Russia</a>
+        public static readonly Regex Send = new Regex(@"^(\<a.+\/a\>) (\<a.+\/a\>) sent a postcard to (\<i.+\/i\>) (\<a.+\/a\>)$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
-        // <a href="/user/21m0">21m0</a> from <i title="China" class="flag flag-CN"></i> <a href="/country/CN">China</a> just signed up
+        // <a href =\"/user/MoonWencke\">MoonWencke</a> from <i title=\"Germany flag\" class=\"flag flag-DE\"></i> <a href=\"/country/DE\">Germany</a> just signed up
         public static readonly Regex SignUp = new Regex(@"^(\<a.+\/a\>).+(\<a.+\/a\>) just signed up$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
-        // <a href="/country/AU"><i title="Australia" class="flag flag-AU"></i></a> <a href="/user/WattlePark">WattlePark</a> uploaded postcard <a href="/country/AU"><i title="Australia" class="flag flag-AU"></i></a> <a href="/postcards/AU-555156">AU-555156</a>
+        // <a title=\"Japan flag\" href=\"/country/JP\"><i class=\"flag flag-JP\"></i></a> <a href=\"/user/morningchild\">morningchild</a> uploaded postcard <a title=\"Thailand flag\" href=\"/country/TH\"><i class=\"flag flag-TH\"></i></a> <a href=\"/postcards/TH-330886\">TH-330886</a>
         public static readonly Regex Upload = new Regex(@"^(\<a.+\/a\>) (\<a.+\/a\>) uploaded postcard (\<a.+\/a\>) (\<a.+\/a\>)$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
     }
 }

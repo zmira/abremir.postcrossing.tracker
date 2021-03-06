@@ -22,10 +22,10 @@ namespace abremir.postcrossing.engine.Extensions
 
             if (string.IsNullOrWhiteSpace(name))
             {
-                name = ((XElement)countryElement.FirstNode).FirstAttribute.Value;
+                name = countryElement.Attribute("title").Value.Split(' ')[0];
             }
 
-            var code = countryElement.FirstAttribute.Value.Split('/')[2];
+            var code = countryElement.Attribute("href").Value.Split('/')[2];
 
             return new Country
             {
@@ -46,7 +46,7 @@ namespace abremir.postcrossing.engine.Extensions
 
             return new Postcard
             {
-                PostcardId = postcardElement.FirstAttribute.Value.Split('/')[2],
+                PostcardId = postcardElement.Attribute("href").Value.Split('/')[2],
                 Country = xelement.ToCountry(countryIndex)
             };
         }

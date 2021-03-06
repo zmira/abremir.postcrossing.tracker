@@ -93,7 +93,7 @@ namespace abremir.postcrossing.engine.Helpers
                 RawEvent = rawEvent,
                 EventType = PostcrossingEventTypeEnum.Send,
                 User = xelement.ToUser(),
-                ToCountry = xelement.ToCountry(3)
+                ToCountry = xelement.ToCountry(2)
             };
         }
 

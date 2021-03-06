@@ -41,7 +41,7 @@ namespace abremir.postcrossing.engine.tests.Clients
             var toUser = "to_user";
             var fromUser = "from_user";
             var postcardId = "postcard_id";
-            var rawEvent = $@"<a href=""/country/XX""><i title=""country"" class=""flag flag-XX""></i></a> <a href=""/user/{toUser}"">{toUser}</a> received a <a href=""/postcards/{postcardId}"">postcard</a> from <a href=""/country/XX""><i title=""country"" class=""flag flag-XX""></i></a> <a href=""/user/{fromUser}"">{fromUser}</a>";
+            var rawEvent = $@"<a title=""country flag"" href=""/country/XX""><i class=""flag flag-XX""></i></a> <a href=""/user/{toUser}"">{toUser}</a> received a <a href=""/postcards/{postcardId}"">postcard</a> from <a title=""country flag"" href=""/country/XX""><i class=""flag flag-XX""></i></a> <a href=""/user/{fromUser}"">{fromUser}</a>";
             var returnValue = new List<string> { eventId.ToString(), rawEvent };
 
             _httpTest.RespondWith($"[{JsonConvert.SerializeObject(returnValue)}]");
@@ -62,7 +62,7 @@ namespace abremir.postcrossing.engine.tests.Clients
             var eventId = 2;
             var fromUser = "from_user";
             var toCountry = "to_country";
-            var rawEvent = $@"<a href=""/country/XX""><i title=""country"" class=""flag flag-XX""></i></a> <a href=""/user/user"">{fromUser}</a> sent a postcard to <a href=""/country/XX""><i title=""country"" class=""flag flag-XX""></i></a> <a href=""/country/XX"">{toCountry}</a>";
+            var rawEvent = $@"<a title=""country flag"" href=""/country/XX""><i class=""flag flag-XX""></i></a> <a href=""/user/user"">{fromUser}</a> sent a postcard to <i title=""country flag"" class=""flag flag-XX""></i> <a href=""/country/XX"">{toCountry}</a>";
             var returnValue = new List<string> { eventId.ToString(), rawEvent };
 
             _httpTest.RespondWith($"[{JsonConvert.SerializeObject(returnValue)}]");
@@ -82,7 +82,7 @@ namespace abremir.postcrossing.engine.tests.Clients
         {
             var eventId = 3;
             var userName = "user_name";
-            var rawEvent = $@"<a href=""/user/user"">{userName}</a> from <i title=""country"" class=""flag flag-XX""></i> <a href=""/country/XX"">country</a> just signed up";
+            var rawEvent =$@"<a href =""/user/user"">{userName}</a> from <i title=""country flag"" class=""flag flag-XX""></i> <a href=""/country/XX"">country</a> just signed up";
             var returnValue = new List<string> { eventId.ToString(), rawEvent };
 
             _httpTest.RespondWith($"[{JsonConvert.SerializeObject(returnValue)}]");
@@ -103,7 +103,7 @@ namespace abremir.postcrossing.engine.tests.Clients
             var eventId = 4;
             var userName = "user_name";
             var postcardId = "postcard_id";
-            var rawEvent = $@"<a href=""/country/XX""><i title=""country"" class=""flag flag-XX""></i></a> <a href=""/user/user"">{userName}</a> uploaded postcard <a href=""/country/XX""><i title=""country"" class=""flag flag-XX""></i></a> <a href=""/postcards/{postcardId}"">card</a>";
+            var rawEvent = $@"<a title=""country flag"" href=""/country/XX""><i class=""flag flag-XX""></i></a> <a href=""/user/user"">{userName}</a> uploaded postcard <a title=""country flag"" href=""/country/XX""><i class=""flag flag-XX""></i></a> <a href=""/postcards/{postcardId}"">card</a>";
             var returnValue = new List<string> { eventId.ToString(), rawEvent };
 
             _httpTest.RespondWith($"[{JsonConvert.SerializeObject(returnValue)}]");

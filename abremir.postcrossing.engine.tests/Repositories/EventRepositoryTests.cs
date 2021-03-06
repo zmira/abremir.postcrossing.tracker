@@ -42,10 +42,10 @@ namespace abremir.postcrossing.engine.tests.Repositories
 
         [DataTestMethod]
         [DataRow(@"Account closed for <a href=""/user/user"">user</a> from  <i title=""country"" class=""flag flag-XX""></i> <a href=""/country/XX"">country</a>")]
-        [DataRow(@"<a href=""/country/XX""><i title=""country"" class=""flag flag-XX""></i></a> <a href=""/user/user"">user</a> sent a postcard to <a href=""/country/XX""><i title=""country"" class=""flag flag-XX""></i></a> <a href=""/country/XX"">country</a>")]
-        [DataRow(@"<a href=""/user/user"">user</a> from <i title=""country"" class=""flag flag-XX""></i> <a href=""/country/XX"">country</a> just signed up")]
-        [DataRow(@"<a href=""/country/XX""><i title=""country"" class=""flag flag-XX""></i></a> <a href=""/user/user"">user</a> uploaded postcard <a href=""/country/XX""><i title=""country"" class=""flag flag-XX""></i></a> <a href=""/postcards/card"">card</a>")]
-        [DataRow(@"<a href=""/country/XX""><i title=""country"" class=""flag flag-XX""></i></a> <a href=""/user/user"">user</a> received a <a href=""/postcards/card"">postcard</a> from <a href=""/country/XX""><i title=""country"" class=""flag flag-XX""></i></a> <a href=""/user/user"">user</a>")]
+        [DataRow(@"<a title=""country flag"" href=""/country/XX""><i class=""flag flag-XX""></i></a> <a href=""/user/user"">user</a> received a <a href=""/postcards/postcard"">postcard</a> from <a title=""country flag"" href=""/country/XX""><i class=""flag flag-XX""></i></a> <a href=""/user/user"">user</a>")]
+        [DataRow(@"<a title=""country flag"" href=""/country/XX""><i class=""flag flag-XX""></i></a> <a href=""/user/user"">user</a> sent a postcard to <i title=""country flag"" class=""flag flag-XX""></i> <a href=""/country/XX"">country</a>")]
+        [DataRow(@"<a href =""/user/user"">user</a> from <i title=""country flag"" class=""flag flag-XX""></i> <a href=""/country/XX"">country</a> just signed up")]
+        [DataRow(@"<a title=""country flag"" href=""/country/XX""><i class=""flag flag-XX""></i></a> <a href=""/user/user"">user</a> uploaded postcard <a title=""country flag"" href=""/country/XX""><i class=""flag flag-XX""></i></a> <a href=""/postcards/postcard"">card</a>")]
         public void Add_ValidEvent_Inserts(string rawEvent)
         {
             var postcrossingEvent = EventBaseHelper.MapToEventBase(rawEvent);

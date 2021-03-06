@@ -20,13 +20,13 @@ namespace abremir.postcrossing.engine.tests.Extensions
         }
 
         [DataTestMethod]
-        [DataRow(@"<a href=""/country/{1}""><i title=""{0}"" class=""flag flag-{1}""></i></a> <a href=""/user/user"">user</a> received a <a href=""/postcards/card"">postcard</a> from <a href=""/country/XX""><i title=""country"" class=""flag flag-XX""></i></a> <a href=""/user/user"">user</a>", 1)]
-        [DataRow(@"<a href=""/country/XX""><i title=""country"" class=""flag flag-XX""></i></a> <a href=""/user/user"">user</a> received a <a href=""/postcards/card"">postcard</a> from <a href=""/country/{1}""><i title=""{0}"" class=""flag flag-{1}""></i></a> <a href=""/user/user"">user</a>", 2)]
-        [DataRow(@"<a href=""/country/{1}""><i title=""{0}"" class=""flag flag-{1}""></i></a> <a href=""/user/user"">user</a> sent a postcard to <a href=""/country/XX""><i title=""country"" class=""flag flag-XX""></i></a> <a href=""/country/XX"">country</a>", 1)]
-        [DataRow(@"<a href=""/country/XX""><i title=""country"" class=""flag flag-XX""></i></a> <a href=""/user/user"">user</a> sent a postcard to <a href=""/country/{1}""><i title=""{0}"" class=""flag flag-{1}""></i></a> <a href=""/country/{1}"">{0}</a>", 3)]
-        [DataRow(@"<a href=""/user/user"">user</a> from <i title=""{0}"" class=""flag flag-{1}""></i> <a href=""/country/{1}"">{0}</a> just signed up", 1)]
-        [DataRow(@"<a href=""/country/{1}""><i title=""{0}"" class=""flag flag-{1}""></i></a> <a href=""/user/user"">user</a> uploaded postcard <a href=""/country/XX""><i title=""country"" class=""flag flag-XX""></i></a> <a href=""/postcards/card"">card</a>", 1)]
-        [DataRow(@"<a href=""/country/XX""><i title=""country"" class=""flag flag-XX""></i></a> <a href=""/user/user"">user</a> uploaded postcard <a href=""/country/{1}""><i title=""{0}"" class=""flag flag-{1}""></i></a> <a href=""/postcards/card"">card</a>", 2)]
+        [DataRow(@"<a title=""{0} flag"" href=""/country/{1}""><i class=""flag flag-{1}""></i></a> <a href=""/user/user"">user</a> received a <a href=""/postcards/postcard"">postcard</a> from <a title=""country flag"" href=""/country/XX""><i class=""flag flag-XX""></i></a> <a href=""/user/user"">user</a>", 1)]
+        [DataRow(@"<a title=""country flag"" href=""/country/XX""><i class=""flag flag-XX""></i></a> <a href=""/user/user"">user</a> received a <a href=""/postcards/postcard"">postcard</a> from <a title=""{0} flag"" href=""/country/{1}""><i class=""flag flag-{1}""></i></a> <a href=""/user/user"">user</a>", 2)]
+        [DataRow(@"<a title=""{0} flag"" href=""/country/{1}""><i class=""flag flag-{1}""></i></a> <a href=""/user/user"">user</a> sent a postcard to <i title=""country flag"" class=""flag flag-XX""></i> <a href=""/country/XX"">country</a>", 1)]
+        [DataRow(@"<a title=""country flag"" href=""/country/XX""><i class=""flag flag-XX""></i></a> <a href=""/user/user"">user</a> sent a postcard to <i title=""{0} flag"" class=""flag flag-{1}""></i> <a href=""/country/{1}"">{0}</a>", 2)]
+        [DataRow(@"<a href =""/user/user"">user</a> from <i title=""{0} flag"" class=""flag flag-{1}""></i> <a href=""/country/{1}"">{0}</a> just signed up", 1)]
+        [DataRow(@"<a title=""{0} flag"" href=""/country/{1}""><i class=""flag flag-{1}""></i></a> <a href=""/user/user"">user</a> uploaded postcard <a title=""country flag"" href=""/country/XX""><i class=""flag flag-XX""></i></a> <a href=""/postcards/postcard"">card</a>", 1)]
+        [DataRow(@"<a title=""country flag"" href=""/country/XX""><i class=""flag flag-XX""></i></a> <a href=""/user/user"">user</a> uploaded postcard <a title=""{0} flag"" href=""/country/{1}""><i class=""flag flag-{1}""></i></a> <a href=""/postcards/postcard"">card</a>", 2)]
         public void ToCountry_CountryElementFound_ReturnsCountryModel(string rawEvent, int countryIndex)
         {
             var country = "TEST_COUNTRY";
@@ -53,8 +53,8 @@ namespace abremir.postcrossing.engine.tests.Extensions
         }
 
         [DataTestMethod]
-        [DataRow(@"<a href=""/country/XX""><i title=""country"" class=""flag flag-XX""></i></a> <a href=""/user/user"">user</a> received a <a href=""/postcards/{0}"">postcard</a> from <a href=""/country/XX""><i title=""country"" class=""flag flag-XX""></i></a> <a href=""/user/user"">user</a>")]
-        [DataRow(@"<a href=""/country/XX""><i title=""country"" class=""flag flag-XX""></i></a> <a href=""/user/user"">user</a> uploaded postcard <a href=""/country/XX""><i title=""country"" class=""flag flag-XX""></i></a> <a href=""/postcards/{0}"">{0}</a>")]
+        [DataRow(@"<a title=""country flag"" href=""/country/XX""><i class=""flag flag-XX""></i></a> <a href=""/user/user"">user</a> received a <a href=""/postcards/{0}"">postcard</a> from <a title=""country flag"" href=""/country/XX""><i class=""flag flag-XX""></i></a> <a href=""/user/user"">user</a>")]
+        [DataRow(@"<a title=""country flag"" href=""/country/XX""><i class=""flag flag-XX""></i></a> <a href=""/user/user"">user</a> uploaded postcard <a title=""country flag"" href=""/country/XX""><i class=""flag flag-XX""></i></a> <a href=""/postcards/{0}"">card</a>")]
         public void ToPostcard_PostcardElementFound_ReturnsPostcardModel(string rawEvent)
         {
             var cardId = "CARD_ID";
@@ -79,11 +79,11 @@ namespace abremir.postcrossing.engine.tests.Extensions
         }
 
         [DataTestMethod]
-        [DataRow(@"<a href=""/country/XX""><i title=""country"" class=""flag flag-XX""></i></a> <a href=""/user/{0}"">{0}</a> received a <a href=""/postcards/card"">postcard</a> from <a href=""/country/XX""><i title=""country"" class=""flag flag-XX""></i></a> <a href=""/user/user"">user</a>", 1)]
-        [DataRow(@"<a href=""/country/XX""><i title=""country"" class=""flag flag-XX""></i></a> <a href=""/user/user"">user</a> received a <a href=""/postcards/card"">postcard</a> from <a href=""/country/XX""><i title=""country"" class=""flag flag-XX""></i></a> <a href=""/user/{0}"">{0}</a>", 2)]
-        [DataRow(@"<a href=""/country/XX""><i title=""country"" class=""flag flag-XX""></i></a> <a href=""/user/{0}"">{0}</a> sent a postcard to <a href=""/country/XX""><i title=""country"" class=""flag flag-XX""></i></a> <a href=""/country/XX"">country</a>", 1)]
-        [DataRow(@"<a href=""/user/{0}"">{0}</a> from <i title=""country"" class=""flag flag-XX""></i> <a href=""/country/XX"">country</a> just signed up", 1)]
-        [DataRow(@"<a href=""/country/XX""><i title=""country"" class=""flag flag-XX""></i></a> <a href=""/user/{0}"">{0}</a> uploaded postcard <a href=""/country/XX""><i title=""country"" class=""flag flag-XX""></i></a> <a href=""/postcards/card"">card</a>", 1)]
+        [DataRow(@"<a title=""country flag"" href=""/country/XX""><i class=""flag flag-XX""></i></a> <a href=""/user/{0}"">{0}</a> received a <a href=""/postcards/postcard"">postcard</a> from <a title=""country flag"" href=""/country/XX""><i class=""flag flag-XX""></i></a> <a href=""/user/user"">user</a>", 1)]
+        [DataRow(@"<a title=""country flag"" href=""/country/XX""><i class=""flag flag-XX""></i></a> <a href=""/user/user"">user</a> received a <a href=""/postcards/postcard"">postcard</a> from <a title=""country flag"" href=""/country/XX""><i class=""flag flag-XX""></i></a> <a href=""/user/{0}"">{0}</a>", 2)]
+        [DataRow(@"<a title=""country flag"" href=""/country/XX""><i class=""flag flag-XX""></i></a> <a href=""/user/{0}"">{0}</a> sent a postcard to <i title=""country flag"" class=""flag flag-XX""></i> <a href=""/country/XX"">country</a>", 1)]
+        [DataRow(@"<a href =""/user/{0}"">{0}</a> from <i title=""country flag"" class=""flag flag-XX""></i> <a href=""/country/XX"">country</a> just signed up", 1)]
+        [DataRow(@"<a title=""country flag"" href=""/country/XX""><i class=""flag flag-XX""></i></a> <a href=""/user/{0}"">{0}</a> uploaded postcard <a title=""country flag"" href=""/country/XX""><i class=""flag flag-XX""></i></a> <a href=""/postcards/postcard"">card</a>", 1)]
         public void ToUser_UserElementFoundWithCountry_ReturnsUserModelWithCountry(string rawEvent, int userIndex)
         {
             var username = "TEST_USER";

@@ -3,10 +3,12 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:progRing="clr-namespace:AvaloniaProgressRing;assembly=AvaloniaProgressRing"
-        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        mc:Ignorable="d"
+        d:DesignHeight="450"
+        d:DesignWidth="800"
         x:Class="abremir.postcrossing.tracker.MainWindow"
-        Title="Postcrossing Tracker"
         Icon="/Assets/postcrossing.ico"
+        Title="Postcrossing Tracker"
         Padding="5">
 
   <Border BorderBrush="Black"
@@ -28,6 +30,7 @@
                              Width="25"
                              Height="25"
                              HorizontalAlignment="Right"
+                             IsActive="False"
                              VerticalAlignment="Top"
                              Foreground="Green" />
 
@@ -111,19 +114,32 @@
               TickFrequency="1"
               Value="5" />
 
-      <!--<StackPanel Orientation="Horizontal" Grid.Column="2" Grid.Row="3">
-        <TextBlock>Refresh frequency:</TextBlock>
-        <TextBlock Text="{Binding ElementName=RefreshFrequency,Path=Value}" Margin="5,0,0,0"></TextBlock>
-        <TextBlock>s</TextBlock>
-      </StackPanel>-->
+      <Grid Grid.Row="3"
+            Grid.Column="1"
+            ColumnDefinitions="*, *"
+            RowDefinitions="*">
 
-      <ToggleSwitch x:Name="StartTracking"
-                    Grid.Row="3"
-                    Grid.Column="1"
-                    HorizontalAlignment="Right"
-                    Margin="0,5,0,0"
-                    OffContent="Not tracking"
-                    OnContent="Tracking" />
+        <TextBlock Grid.Row="0"
+                   Grid.Column="0"
+                   Margin="5,0,0,0"
+                   VerticalAlignment="Center">
+          <TextBlock.Text>
+            <MultiBinding StringFormat="{}Refresh frequency: {0}s">
+              <Binding ElementName="RefreshFrequency"
+                       Path="Value" />
+            </MultiBinding>
+          </TextBlock.Text>
+        </TextBlock>
+
+        <ToggleSwitch x:Name="StartTracking"
+                      Grid.Row="0"
+                      Grid.Column="1"
+                      HorizontalAlignment="Right"
+                      Margin="0,5,0,0"
+                      OffContent="Not tracking"
+                      OnContent="Tracking" />
+      </Grid>
+
     </Grid>
   </Border>
 </Window>

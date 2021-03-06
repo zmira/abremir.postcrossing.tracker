@@ -55,10 +55,14 @@
 
               <TextBlock>
                 <TextBlock.Text>
-                  <MultiBinding StringFormat="{}{0}/{1} sending to {2}">
-                    <Binding Path="User.Name" />
-                    <Binding Path="User.Country.Name" />
-                    <Binding Path="ToCountry.Name" />
+                  <MultiBinding StringFormat="{}{0}/{1} sending to {2}"
+                                Mode="OneWay">
+                    <Binding Path="User.Name"
+                             Mode="OneWay" />
+                    <Binding Path="User.Country.Name"
+                             Mode="OneWay" />
+                    <Binding Path="ToCountry.Name"
+                             Mode="OneWay" />
                   </MultiBinding>
                 </TextBlock.Text>
               </TextBlock>
@@ -88,12 +92,18 @@
 
               <TextBlock>
                 <TextBlock.Text>
-                  <MultiBinding StringFormat="{}{0}/{1} registered {2} from {3}/{4}">
-                    <Binding Path="User.Name" />
-                    <Binding Path="User.Country.Name" />
-                    <Binding Path="Postcard.PostcardId" />
-                    <Binding Path="FromUser.Name" />
-                    <Binding Path="FromUser.Country.Name" />
+                  <MultiBinding StringFormat="{}{0}/{1} registered {2} from {3}/{4}"
+                                Mode="OneWay">
+                    <Binding Path="User.Name"
+                             Mode="OneWay" />
+                    <Binding Path="User.Country.Name"
+                             Mode="OneWay" />
+                    <Binding Path="Postcard.PostcardId"
+                             Mode="OneWay" />
+                    <Binding Path="FromUser.Name"
+                             Mode="OneWay" />
+                    <Binding Path="FromUser.Country.Name"
+                             Mode="OneWay" />
                   </MultiBinding>
                 </TextBlock.Text>
               </TextBlock>
@@ -124,9 +134,11 @@
                    Margin="5,0,0,0"
                    VerticalAlignment="Center">
           <TextBlock.Text>
-            <MultiBinding StringFormat="{}Refresh frequency: {0}s">
+            <MultiBinding StringFormat="{}Refresh frequency: {0}s"
+                          Mode="OneWay">
               <Binding ElementName="RefreshFrequency"
-                       Path="Value" />
+                       Path="Value"
+                       Mode="OneWay" />
             </MultiBinding>
           </TextBlock.Text>
         </TextBlock>

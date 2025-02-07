@@ -1,12 +1,11 @@
-﻿using abremir.postcrossing.engine.Clients;
+﻿using System.Text.Json.Nodes;
+using System.Threading.Tasks;
+using abremir.postcrossing.engine.Clients;
 using abremir.postcrossing.engine.Models.Enumerations;
 using abremir.postcrossing.engine.Models.PostcrossingEvents;
 using Flurl.Http.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Newtonsoft.Json;
 using NFluent;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace abremir.postcrossing.engine.tests.Clients
 {
@@ -42,9 +41,9 @@ namespace abremir.postcrossing.engine.tests.Clients
             var fromUser = "from_user";
             var postcardId = "postcard_id";
             var rawEvent = $@"<a title=""country flag"" href=""/country/XX""><i class=""flag flag-XX""></i></a> <a href=""/user/{toUser}"">{toUser}</a> received a <a href=""/postcards/{postcardId}"">postcard</a> from <a title=""country flag"" href=""/country/XX""><i class=""flag flag-XX""></i></a> <a href=""/user/{fromUser}"">{fromUser}</a>";
-            var returnValue = new List<string> { eventId.ToString(), rawEvent };
+            var returnValue = new JsonArray { eventId, rawEvent };
 
-            _httpTest.RespondWith($"[{JsonConvert.SerializeObject(returnValue)}]");
+            _httpTest.RespondWith($"[{returnValue.ToJsonString()}]");
 
             var result = await _postcrossingClient.GetPostcrossingEventsAsync();
 
@@ -63,9 +62,9 @@ namespace abremir.postcrossing.engine.tests.Clients
             var fromUser = "from_user";
             var toCountry = "to_country";
             var rawEvent = $@"<a title=""country flag"" href=""/country/XX""><i class=""flag flag-XX""></i></a> <a href=""/user/user"">{fromUser}</a> sent a postcard to <i title=""country flag"" class=""flag flag-XX""></i> <a href=""/country/XX"">{toCountry}</a>";
-            var returnValue = new List<string> { eventId.ToString(), rawEvent };
+            var returnValue = new JsonArray { eventId, rawEvent };
 
-            _httpTest.RespondWith($"[{JsonConvert.SerializeObject(returnValue)}]");
+            _httpTest.RespondWith($"[{returnValue.ToJsonString()}]");
 
             var result = await _postcrossingClient.GetPostcrossingEventsAsync();
 
@@ -82,10 +81,10 @@ namespace abremir.postcrossing.engine.tests.Clients
         {
             var eventId = 3;
             var userName = "user_name";
-            var rawEvent =$@"<a href =""/user/user"">{userName}</a> from <i title=""country flag"" class=""flag flag-XX""></i> <a href=""/country/XX"">country</a> just signed up";
-            var returnValue = new List<string> { eventId.ToString(), rawEvent };
+            var rawEvent = $@"<a href =""/user/user"">{userName}</a> from <i title=""country flag"" class=""flag flag-XX""></i> <a href=""/country/XX"">country</a> just signed up";
+            var returnValue = new JsonArray { eventId, rawEvent };
 
-            _httpTest.RespondWith($"[{JsonConvert.SerializeObject(returnValue)}]");
+            _httpTest.RespondWith($"[{returnValue.ToJsonString()}]");
 
             var result = await _postcrossingClient.GetPostcrossingEventsAsync();
 
@@ -104,9 +103,9 @@ namespace abremir.postcrossing.engine.tests.Clients
             var userName = "user_name";
             var postcardId = "postcard_id";
             var rawEvent = $@"<a title=""country flag"" href=""/country/XX""><i class=""flag flag-XX""></i></a> <a href=""/user/user"">{userName}</a> uploaded postcard <a title=""country flag"" href=""/country/XX""><i class=""flag flag-XX""></i></a> <a href=""/postcards/{postcardId}"">card</a>";
-            var returnValue = new List<string> { eventId.ToString(), rawEvent };
+            var returnValue = new JsonArray { eventId, rawEvent };
 
-            _httpTest.RespondWith($"[{JsonConvert.SerializeObject(returnValue)}]");
+            _httpTest.RespondWith($"[{returnValue.ToJsonString()}]");
 
             var result = await _postcrossingClient.GetPostcrossingEventsAsync();
 
@@ -123,9 +122,9 @@ namespace abremir.postcrossing.engine.tests.Clients
         {
             var eventId = 5;
             var rawEvent = @"Account closed for <a href=""/user/user"">user</a> from  <i title=""country"" class=""flag flag-XX""></i> <a href=""/country/XX"">country</a>";
-            var returnValue = new List<string> { eventId.ToString(), rawEvent };
+            var returnValue = new JsonArray { eventId, rawEvent };
 
-            _httpTest.RespondWith($"[{JsonConvert.SerializeObject(returnValue)}]");
+            _httpTest.RespondWith($"[{returnValue.ToJsonString()}]");
 
             var result = await _postcrossingClient.GetPostcrossingEventsAsync();
 

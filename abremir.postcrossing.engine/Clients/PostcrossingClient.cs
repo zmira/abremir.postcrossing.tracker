@@ -1,11 +1,12 @@
-﻿using abremir.postcrossing.engine.Assets;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Text.Json.Nodes;
+using System.Threading.Tasks;
+using abremir.postcrossing.engine.Assets;
 using abremir.postcrossing.engine.Helpers;
 using abremir.postcrossing.engine.Models.PostcrossingEvents;
 using Flurl;
 using Flurl.Http;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace abremir.postcrossing.engine.Clients
 {
@@ -18,22 +19,22 @@ namespace abremir.postcrossing.engine.Clients
                 .Where(@event => @event != null);
         }
 
-        private async Task<List<List<string>>> GetRawPostcrossingEventsAsync(long fromEventId = 0)
+        private async Task<List<JsonArray>> GetRawPostcrossingEventsAsync(long fromEventId = 0)
         {
             return await PostcrossingTrackerConstants
                 .PostcrossingLiveEventsDomain
                 .AppendPathSegments(PostcrossingTrackerConstants.PostcrossingLiveEventsPathSegments)
                 .SetQueryParam(PostcrossingTrackerConstants.PostcrossingLiveEventsQueryParameter, fromEventId)
-                .GetJsonAsync<List<List<string>>>();
+                .GetJsonAsync<List<JsonArray>>();
         }
 
-        private EventBase MapToEventBase(List<string> postcrossingEvent)
+        private EventBase MapToEventBase(JsonArray postcrossingEvent)
         {
-            var @event = EventBaseHelper.MapToEventBase(postcrossingEvent[1]);
+            var @event = EventBaseHelper.MapToEventBase(postcrossingEvent[1].GetValue<string>());
 
             if (@event != null)
             {
-                @event.EventId = long.Parse(postcrossingEvent[0]);
+                @event.EventId = postcrossingEvent[0].GetValue<long>();
             }
 
             return @event;

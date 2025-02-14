@@ -1,9 +1,9 @@
-﻿using abremir.postcrossing.engine.Models;
+﻿using System.Linq;
+using abremir.postcrossing.engine.Models;
 using abremir.postcrossing.engine.Repositories;
 using abremir.postcrossing.engine.tests.Configuration;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NFluent;
-using System.Linq;
 
 namespace abremir.postcrossing.engine.tests.Repositories
 {
@@ -18,7 +18,7 @@ namespace abremir.postcrossing.engine.tests.Repositories
         }
 
         [TestMethod]
-        public void Add_NullPOstcard_ReturnsNullAndDoesNotInsert()
+        public void Add_NullPostcard_ReturnsNullAndDoesNotInsert()
         {
             var result = _postcardRepository.Add(null);
 

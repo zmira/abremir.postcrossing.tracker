@@ -1,13 +1,13 @@
-﻿using abremir.postcrossing.engine.Assets;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using abremir.postcrossing.engine.Assets;
 using abremir.postcrossing.engine.Attributes;
 using abremir.postcrossing.engine.Extensions;
 using abremir.postcrossing.engine.Models.Enumerations;
 using abremir.postcrossing.engine.Models.PostcrossingEvents;
 using abremir.postcrossing.engine.Services;
 using LiteDB;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace abremir.postcrossing.engine.Repositories
 {
@@ -41,7 +41,7 @@ namespace abremir.postcrossing.engine.Repositories
                     continue;
                 }
 
-                postcrossingEvent.Timestamp = DateTimeOffset.Now.ToHundredthOfSecond();
+                postcrossingEvent.Timestamp = DateTimeOffset.Now;
 
                 EventBase @event;
                 switch (postcrossingEvent.EventType)

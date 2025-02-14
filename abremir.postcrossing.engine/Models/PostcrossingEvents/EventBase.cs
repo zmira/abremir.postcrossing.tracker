@@ -1,7 +1,8 @@
-﻿using abremir.postcrossing.engine.Attributes;
+﻿using System;
+using abremir.postcrossing.engine.Attributes;
+using abremir.postcrossing.engine.Extensions;
 using abremir.postcrossing.engine.Models.Enumerations;
 using LiteDB;
-using System;
 
 namespace abremir.postcrossing.engine.Models.PostcrossingEvents
 {
@@ -13,6 +14,12 @@ namespace abremir.postcrossing.engine.Models.PostcrossingEvents
 
         public PostcrossingEventTypeEnum EventType { get; set; }
         public string RawEvent { get; set; }
-        public DateTimeOffset Timestamp { get; set; }
+
+        private DateTimeOffset _timestamp;
+        public DateTimeOffset Timestamp
+        {
+            get { return _timestamp; }
+            set { _timestamp = value.ToHundredthOfSecond(); }
+        }
     }
 }

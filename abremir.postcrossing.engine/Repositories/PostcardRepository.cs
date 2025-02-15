@@ -23,8 +23,6 @@ namespace abremir.postcrossing.engine.Repositories
                 return null;
             }
 
-            postcard.TrimAllStrings();
-
             using var repository = _repositoryService.GetRepository();
 
             repository.Insert(postcard, PostcrossingTrackerConstants.PostcardCollectionName);

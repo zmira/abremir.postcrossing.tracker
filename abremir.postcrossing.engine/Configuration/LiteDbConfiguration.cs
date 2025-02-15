@@ -6,7 +6,7 @@ namespace abremir.postcrossing.engine.Configuration
     {
         public static void Configure()
         {
-            BsonMapper.Global.TrimWhitespace = false;
+            BsonMapper.Global.TrimWhitespace = true;
             BsonMapper.Global.EmptyStringToNull = false;
         }
     }

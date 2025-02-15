@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using abremir.postcrossing.engine.Assets;
-using abremir.postcrossing.engine.Extensions;
 using abremir.postcrossing.engine.Models;
 using abremir.postcrossing.engine.Services;
 
@@ -20,8 +19,6 @@ namespace abremir.postcrossing.engine.Repositories
             {
                 return null;
             }
-
-            country.TrimAllStrings();
 
             using var repository = _repositoryService.GetRepository();
 

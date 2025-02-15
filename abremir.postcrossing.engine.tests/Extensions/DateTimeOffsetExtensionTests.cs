@@ -1,7 +1,7 @@
-﻿using abremir.postcrossing.engine.Extensions;
+﻿using System;
+using abremir.postcrossing.engine.Extensions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NFluent;
-using System;
 
 namespace abremir.postcrossing.engine.tests.Extensions
 {

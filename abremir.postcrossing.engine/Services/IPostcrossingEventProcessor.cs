@@ -1,6 +1,6 @@
-﻿using abremir.postcrossing.engine.Models.Enumerations;
+﻿using System.Collections.Generic;
+using abremir.postcrossing.engine.Models.Enumerations;
 using abremir.postcrossing.engine.Models.PostcrossingEvents;
-using System.Collections.Generic;
 
 namespace abremir.postcrossing.engine.Services
 {

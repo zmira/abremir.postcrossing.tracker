@@ -1,8 +1,8 @@
-﻿using abremir.postcrossing.engine.Assets;
+﻿using System.IO;
+using abremir.postcrossing.engine.Assets;
 using abremir.postcrossing.engine.Models;
 using abremir.postcrossing.engine.Models.PostcrossingEvents;
 using LiteDB;
-using System.IO;
 
 namespace abremir.postcrossing.engine.Services
 {
@@ -43,7 +43,7 @@ namespace abremir.postcrossing.engine.Services
             }
         }
 
-        private string GetLocalPathToDatabaseFile()
+        private static string GetLocalPathToDatabaseFile()
         {
             var pathToDataFolder = Path.Combine(Directory.GetCurrentDirectory(), "data");
 

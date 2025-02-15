@@ -49,37 +49,37 @@ namespace abremir.postcrossing.engine.tests.Extensions
             Check.That(user).HasFieldsWithSameValues(expectedResult);
         }
 
-        private Country NonTrimmedCountry() => new Country
+        private static Country NonTrimmedCountry() => new()
         {
             Code = " XX ",
             Name = " COUNTRY NAME "
         };
 
-        private Country TrimmedCountry() => new Country
+        private static Country TrimmedCountry() => new()
         {
             Code = "XX",
             Name = "COUNTRY NAME"
         };
 
-        private User NonTrimmedUser() => new User
+        private static User NonTrimmedUser() => new()
         {
             Name = " NAME ",
             Country = NonTrimmedCountry()
         };
 
-        private User TrimmedUser() => new User
+        private static User TrimmedUser() => new()
         {
             Name = "NAME",
             Country = TrimmedCountry()
         };
 
-        private Postcard NonTrimmedPostcard() => new Postcard
+        private static Postcard NonTrimmedPostcard() => new()
         {
             Country = NonTrimmedCountry(),
             PostcardId = " POSTCARD ID "
         };
 
-        private Postcard TrimmedPostcard() => new Postcard
+        private static Postcard TrimmedPostcard() => new()
         {
             Country = TrimmedCountry(),
             PostcardId = "POSTCARD ID"

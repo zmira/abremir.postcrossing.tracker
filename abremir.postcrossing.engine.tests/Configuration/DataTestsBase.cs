@@ -1,6 +1,6 @@
-﻿using abremir.postcrossing.engine.Services;
+﻿using System.Linq;
+using abremir.postcrossing.engine.Services;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Linq;
 
 namespace abremir.postcrossing.engine.tests.Configuration
 {
@@ -8,7 +8,7 @@ namespace abremir.postcrossing.engine.tests.Configuration
     {
         protected static readonly IRepositoryService MemoryRepositoryService = new TestRepositoryService();
 
-        private void ResetDatabase()
+        private static void ResetDatabase()
         {
             (MemoryRepositoryService as ITestRepositoryService)?.ResetDatabase();
         }
@@ -19,12 +19,12 @@ namespace abremir.postcrossing.engine.tests.Configuration
             ResetDatabase();
         }
 
-        protected T InsertData<T>(T dataToInsert)
+        protected static T InsertData<T>(T dataToInsert)
         {
-            return InsertData(new[] { dataToInsert }).First();
+            return InsertData([dataToInsert]).First();
         }
 
-        protected T[] InsertData<T>(T[] dataToInsert)
+        protected static T[] InsertData<T>(T[] dataToInsert)
         {
             using var repository = MemoryRepositoryService.GetRepository();
 

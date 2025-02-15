@@ -1,27 +1,20 @@
-﻿using abremir.postcrossing.engine.Attributes;
+﻿using System.Collections.Generic;
+using System.Linq;
+using abremir.postcrossing.engine.Attributes;
 using abremir.postcrossing.engine.Models.Enumerations;
 using abremir.postcrossing.engine.Models.PostcrossingEvents;
 using abremir.postcrossing.engine.Repositories;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace abremir.postcrossing.engine.Services
 {
-    public class PostcrossingEventProcessor : IPostcrossingEventProcessor
+    public class PostcrossingEventProcessor(
+        IPostcrossingEngineSettingsService postcrossingEngineSettingsService,
+        IInsightsRepository insightsRepository,
+        IEventRepository eventRepository) : IPostcrossingEventProcessor
     {
-        private readonly IPostcrossingEngineSettingsService _postcrossingEngineSettingsService;
-        private readonly IInsightsRepository _insightsRepository;
-        private readonly IEventRepository _eventRepository;
-
-        public PostcrossingEventProcessor(
-            IPostcrossingEngineSettingsService postcrossingEngineSettingsService,
-            IInsightsRepository insightsRepository,
-            IEventRepository eventRepository)
-        {
-            _postcrossingEngineSettingsService = postcrossingEngineSettingsService;
-            _insightsRepository = insightsRepository;
-            _eventRepository = eventRepository;
-        }
+        private readonly IPostcrossingEngineSettingsService _postcrossingEngineSettingsService = postcrossingEngineSettingsService;
+        private readonly IInsightsRepository _insightsRepository = insightsRepository;
+        private readonly IEventRepository _eventRepository = eventRepository;
 
         public long GetLatestEventId(IEnumerable<EventBase> postcrossingEvents, long currentLatestPostcrossingEventId)
         {
@@ -79,7 +72,7 @@ namespace abremir.postcrossing.engine.Services
 
             if (associatedEventType == null)
             {
-                return Enumerable.Empty<T>();
+                return [];
             }
 
             return _postcrossingEngineSettingsService.PersistData

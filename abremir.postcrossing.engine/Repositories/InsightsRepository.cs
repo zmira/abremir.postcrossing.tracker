@@ -4,14 +4,9 @@ using abremir.postcrossing.engine.Services;
 
 namespace abremir.postcrossing.engine.Repositories
 {
-    public class InsightsRepository : IInsightsRepository
+    public class InsightsRepository(IRepositoryService repositoryService) : IInsightsRepository
     {
-        private readonly IRepositoryService _repositoryService;
-
-        public InsightsRepository(IRepositoryService repositoryService)
-        {
-            _repositoryService = repositoryService;
-        }
+        private readonly IRepositoryService _repositoryService = repositoryService;
 
         public long GetLatestPostcrossingEventId()
         {

@@ -15,10 +15,7 @@ namespace abremir.postcrossing.engine.tests.Configuration
 
         public ILiteRepository GetRepository()
         {
-            if (_tempStream == null)
-            {
-                _tempStream = new TempStream("abremir.postcrossing.engine.tests.litedb");
-            }
+            _tempStream ??= new TempStream("abremir.postcrossing.engine.tests.litedb");
 
             var liteRepository = new LiteRepository(_tempStream);
 

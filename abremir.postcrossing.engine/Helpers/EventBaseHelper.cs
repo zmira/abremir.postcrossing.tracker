@@ -1,8 +1,8 @@
-﻿using abremir.postcrossing.engine.Assets;
+﻿using System.Xml.Linq;
+using abremir.postcrossing.engine.Assets;
 using abremir.postcrossing.engine.Extensions;
 using abremir.postcrossing.engine.Models.Enumerations;
 using abremir.postcrossing.engine.Models.PostcrossingEvents;
-using System.Xml.Linq;
 
 namespace abremir.postcrossing.engine.Helpers
 {
@@ -15,19 +15,14 @@ namespace abremir.postcrossing.engine.Helpers
                 return null;
             }
 
-            switch (GetPostcrossingEventType(rawEvent))
+            return GetPostcrossingEventType(rawEvent) switch
             {
-                case PostcrossingEventTypeEnum.Register:
-                    return ToRegisterEvent(rawEvent);
-                case PostcrossingEventTypeEnum.Send:
-                    return ToSendEvent(rawEvent);
-                case PostcrossingEventTypeEnum.SignUp:
-                    return ToSignUpEvent(rawEvent);
-                case PostcrossingEventTypeEnum.Upload:
-                    return ToUploadEvent(rawEvent);
-                default:
-                    return ToEventBase(rawEvent);
-            }
+                PostcrossingEventTypeEnum.Register => ToRegisterEvent(rawEvent),
+                PostcrossingEventTypeEnum.Send => ToSendEvent(rawEvent),
+                PostcrossingEventTypeEnum.SignUp => ToSignUpEvent(rawEvent),
+                PostcrossingEventTypeEnum.Upload => ToUploadEvent(rawEvent),
+                _ => ToEventBase(rawEvent),
+            };
         }
 
         private static PostcrossingEventTypeEnum GetPostcrossingEventType(string rawEvent)

@@ -1,22 +1,17 @@
-﻿using abremir.postcrossing.engine.Assets;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq.Expressions;
+using abremir.postcrossing.engine.Assets;
 using abremir.postcrossing.engine.Extensions;
 using abremir.postcrossing.engine.Models;
 using abremir.postcrossing.engine.Services;
 using LiteDB;
-using System;
-using System.Collections.Generic;
-using System.Linq.Expressions;
 
 namespace abremir.postcrossing.engine.Repositories
 {
-    public class PostcardRepository : IPostcardRepository
+    public class PostcardRepository(IRepositoryService repositoryService) : IPostcardRepository
     {
-        private readonly IRepositoryService _repositoryService;
-
-        public PostcardRepository(IRepositoryService repositoryService)
-        {
-            _repositoryService = repositoryService;
-        }
+        private readonly IRepositoryService _repositoryService = repositoryService;
 
         public Postcard Add(Postcard postcard)
         {
@@ -59,7 +54,7 @@ namespace abremir.postcrossing.engine.Repositories
             return Get(postcardModel => postcardModel.PostcardId == postcard.PostcardId) ?? Add(postcard);
         }
 
-        private ILiteQueryable<Postcard> GetQueryable(ILiteRepository repository)
+        private static ILiteQueryable<Postcard> GetQueryable(ILiteRepository repository)
         {
             return repository
                 .Query<Postcard>(PostcrossingTrackerConstants.PostcardCollectionName)

@@ -1,8 +1,8 @@
-﻿using abremir.postcrossing.engine.Extensions;
+﻿using System.Xml.Linq;
+using abremir.postcrossing.engine.Extensions;
 using abremir.postcrossing.engine.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NFluent;
-using System.Xml.Linq;
 
 namespace abremir.postcrossing.engine.tests.Extensions
 {
@@ -29,8 +29,8 @@ namespace abremir.postcrossing.engine.tests.Extensions
         [DataRow(@"<a title=""country flag"" href=""/country/XX""><i class=""flag flag-XX""></i></a> <a href=""/user/user"">user</a> uploaded postcard <a title=""{0} flag"" href=""/country/{1}""><i class=""flag flag-{1}""></i></a> <a href=""/postcards/postcard"">card</a>", 2)]
         public void ToCountry_CountryElementFound_ReturnsCountryModel(string rawEvent, int countryIndex)
         {
-            var country = "TEST_COUNTRY";
-            var countryCode = "TC";
+            const string country = "TEST_COUNTRY";
+            const string countryCode = "TC";
             var xelement = XElement.Parse($"<root>{string.Format(rawEvent, country, countryCode)}</root>");
 
             var result = xelement.ToCountry(countryIndex);
@@ -57,7 +57,7 @@ namespace abremir.postcrossing.engine.tests.Extensions
         [DataRow(@"<a title=""country flag"" href=""/country/XX""><i class=""flag flag-XX""></i></a> <a href=""/user/user"">user</a> uploaded postcard <a title=""country flag"" href=""/country/XX""><i class=""flag flag-XX""></i></a> <a href=""/postcards/{0}"">card</a>")]
         public void ToPostcard_PostcardElementFound_ReturnsPostcardModel(string rawEvent)
         {
-            var cardId = "CARD_ID";
+            const string cardId = "CARD_ID";
             var xelement = XElement.Parse($"<root>{string.Format(rawEvent, cardId)}</root>");
 
             var result = xelement.ToPostcard();
@@ -86,7 +86,7 @@ namespace abremir.postcrossing.engine.tests.Extensions
         [DataRow(@"<a title=""country flag"" href=""/country/XX""><i class=""flag flag-XX""></i></a> <a href=""/user/{0}"">{0}</a> uploaded postcard <a title=""country flag"" href=""/country/XX""><i class=""flag flag-XX""></i></a> <a href=""/postcards/postcard"">card</a>", 1)]
         public void ToUser_UserElementFoundWithCountry_ReturnsUserModelWithCountry(string rawEvent, int userIndex)
         {
-            var username = "TEST_USER";
+            const string username = "TEST_USER";
             var xelement = XElement.Parse($"<root>{string.Format(rawEvent, username)}</root>");
 
             var result = xelement.ToUser(userIndex);

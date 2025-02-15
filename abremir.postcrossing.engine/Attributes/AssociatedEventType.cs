@@ -1,18 +1,13 @@
-﻿using abremir.postcrossing.engine.Models.Enumerations;
-using System;
+﻿using System;
 using System.Linq;
+using abremir.postcrossing.engine.Models.Enumerations;
 
 namespace abremir.postcrossing.engine.Attributes
 {
     [AttributeUsage(AttributeTargets.Class, Inherited = false)]
-    internal class AssociatedEventType : Attribute
+    internal class AssociatedEventType(PostcrossingEventTypeEnum eventType) : Attribute
     {
-        public AssociatedEventType(PostcrossingEventTypeEnum eventType)
-        {
-            EventType = eventType;
-        }
-
-        public PostcrossingEventTypeEnum EventType { get; }
+        public PostcrossingEventTypeEnum EventType { get; } = eventType;
 
         public static PostcrossingEventTypeEnum? GetAssociatedEventType<T>()
         {

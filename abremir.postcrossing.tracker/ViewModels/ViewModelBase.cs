@@ -2,7 +2,5 @@
 
 namespace abremir.postcrossing.tracker.ViewModels
 {
-    public class ViewModelBase : ReactiveObject
-    {
-    }
+    public class ViewModelBase : ReactiveObject;
 }

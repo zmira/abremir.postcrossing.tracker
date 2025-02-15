@@ -13,7 +13,7 @@ namespace abremir.postcrossing.engine.tests.Clients
     public class PostcrossingClientTests
     {
         private readonly HttpTest _httpTest;
-        private readonly IPostcrossingClient _postcrossingClient;
+        private readonly PostcrossingClient _postcrossingClient;
 
         public PostcrossingClientTests()
         {
@@ -36,10 +36,10 @@ namespace abremir.postcrossing.engine.tests.Clients
         [TestMethod]
         public async Task GetPostcrossingEventsAsync_RegisterEvent_ReturnsEnumerableWithRegisterEvent()
         {
-            var eventId = 1;
-            var toUser = "to_user";
-            var fromUser = "from_user";
-            var postcardId = "postcard_id";
+            const long eventId = 1;
+            const string toUser = "to_user";
+            const string fromUser = "from_user";
+            const string postcardId = "postcard_id";
             var rawEvent = $@"<a title=""country flag"" href=""/country/XX""><i class=""flag flag-XX""></i></a> <a href=""/user/{toUser}"">{toUser}</a> received a <a href=""/postcards/{postcardId}"">postcard</a> from <a title=""country flag"" href=""/country/XX""><i class=""flag flag-XX""></i></a> <a href=""/user/{fromUser}"">{fromUser}</a>";
             var returnValue = new JsonArray { eventId, rawEvent };
 
@@ -58,9 +58,9 @@ namespace abremir.postcrossing.engine.tests.Clients
         [TestMethod]
         public async Task GetPostcrossingEventsAsync_SendEvent_ReturnsEnumerableWithSendEvent()
         {
-            var eventId = 2;
-            var fromUser = "from_user";
-            var toCountry = "to_country";
+            const long eventId = 2;
+            const string fromUser = "from_user";
+            const string toCountry = "to_country";
             var rawEvent = $@"<a title=""country flag"" href=""/country/XX""><i class=""flag flag-XX""></i></a> <a href=""/user/user"">{fromUser}</a> sent a postcard to <i title=""country flag"" class=""flag flag-XX""></i> <a href=""/country/XX"">{toCountry}</a>";
             var returnValue = new JsonArray { eventId, rawEvent };
 
@@ -79,8 +79,8 @@ namespace abremir.postcrossing.engine.tests.Clients
         [TestMethod]
         public async Task GetPostcrossingEventsAsync_SignUpEvent_ReturnsEnumerableWithSignUpEvent()
         {
-            var eventId = 3;
-            var userName = "user_name";
+            const long eventId = 3;
+            const string userName = "user_name";
             var rawEvent = $@"<a href =""/user/user"">{userName}</a> from <i title=""country flag"" class=""flag flag-XX""></i> <a href=""/country/XX"">country</a> just signed up";
             var returnValue = new JsonArray { eventId, rawEvent };
 
@@ -99,9 +99,9 @@ namespace abremir.postcrossing.engine.tests.Clients
         [TestMethod]
         public async Task GetPostcrossingEventsAsync_UploadEvent_ReturnsEnumerableWithUploadEvent()
         {
-            var eventId = 4;
-            var userName = "user_name";
-            var postcardId = "postcard_id";
+            const long eventId = 4;
+            const string userName = "user_name";
+            const string postcardId = "postcard_id";
             var rawEvent = $@"<a title=""country flag"" href=""/country/XX""><i class=""flag flag-XX""></i></a> <a href=""/user/user"">{userName}</a> uploaded postcard <a title=""country flag"" href=""/country/XX""><i class=""flag flag-XX""></i></a> <a href=""/postcards/{postcardId}"">card</a>";
             var returnValue = new JsonArray { eventId, rawEvent };
 
@@ -120,8 +120,8 @@ namespace abremir.postcrossing.engine.tests.Clients
         [TestMethod]
         public async Task GetPostcrossingEventsAsync_UnknownEvent_ReturnsEnumerableWithEventBase()
         {
-            var eventId = 5;
-            var rawEvent = @"Account closed for <a href=""/user/user"">user</a> from  <i title=""country"" class=""flag flag-XX""></i> <a href=""/country/XX"">country</a>";
+            const long eventId = 5;
+            const string rawEvent = @"Account closed for <a href=""/user/user"">user</a> from  <i title=""country"" class=""flag flag-XX""></i> <a href=""/country/XX"">country</a>";
             var returnValue = new JsonArray { eventId, rawEvent };
 
             _httpTest.RespondWith($"[{returnValue.ToJsonString()}]");

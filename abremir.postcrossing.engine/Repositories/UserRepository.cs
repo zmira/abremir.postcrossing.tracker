@@ -1,22 +1,17 @@
-﻿using abremir.postcrossing.engine.Assets;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq.Expressions;
+using abremir.postcrossing.engine.Assets;
 using abremir.postcrossing.engine.Extensions;
 using abremir.postcrossing.engine.Models;
 using abremir.postcrossing.engine.Services;
 using LiteDB;
-using System;
-using System.Collections.Generic;
-using System.Linq.Expressions;
 
 namespace abremir.postcrossing.engine.Repositories
 {
-    public class UserRepository : IUserRepository
+    public class UserRepository(IRepositoryService repositoryService) : IUserRepository
     {
-        private readonly IRepositoryService _repositoryService;
-
-        public UserRepository(IRepositoryService repositoryService)
-        {
-            _repositoryService = repositoryService;
-        }
+        private readonly IRepositoryService _repositoryService = repositoryService;
 
         public User Add(User user)
         {
@@ -59,7 +54,7 @@ namespace abremir.postcrossing.engine.Repositories
             return Get(userModel => userModel.Name == user.Name) ?? Add(user);
         }
 
-        private ILiteQueryable<User> GetQueryable(ILiteRepository repository)
+        private static ILiteQueryable<User> GetQueryable(ILiteRepository repository)
         {
             return repository
                 .Query<User>(PostcrossingTrackerConstants.UserCollectionName)

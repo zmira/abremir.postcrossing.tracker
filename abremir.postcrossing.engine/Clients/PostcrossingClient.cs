@@ -19,7 +19,7 @@ namespace abremir.postcrossing.engine.Clients
                 .Where(@event => @event != null);
         }
 
-        private async Task<List<JsonArray>> GetRawPostcrossingEventsAsync(long fromEventId = 0)
+        private static async Task<List<JsonArray>> GetRawPostcrossingEventsAsync(long fromEventId = 0)
         {
             return await PostcrossingTrackerConstants
                 .PostcrossingLiveEventsDomain

@@ -1,40 +1,29 @@
-﻿using abremir.postcrossing.engine.Clients;
+﻿using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
+using abremir.postcrossing.engine.Clients;
 using abremir.postcrossing.engine.Models.Enumerations;
 using abremir.postcrossing.engine.Models.PostcrossingEvents;
 using abremir.postcrossing.engine.Repositories;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace abremir.postcrossing.engine.Services
 {
-    public class PostcrossingEventService : IPostcrossingEventService
+    public class PostcrossingEventService(
+        IPostcrossingEngineSettingsService postcrossingEngineSettingsService,
+        IPostcrossingClient postcrossingClient,
+        IInsightsRepository insightsRepository,
+        IEventRepository eventRepository,
+        IPostcrossingEventProcessor postcrossingEventProcessor) : IPostcrossingEventService
     {
-        private readonly IPostcrossingEngineSettingsService _postcrossingEngineSettingsService;
-        private readonly IPostcrossingClient _postcrossingClient;
-        private readonly IInsightsRepository _insightsRepository;
-        private readonly IEventRepository _eventRepository;
-        private readonly IPostcrossingEventProcessor _postcrossingEventProcessor;
+        private readonly IPostcrossingEngineSettingsService _postcrossingEngineSettingsService = postcrossingEngineSettingsService;
+        private readonly IPostcrossingClient _postcrossingClient = postcrossingClient;
+        private readonly IInsightsRepository _insightsRepository = insightsRepository;
+        private readonly IEventRepository _eventRepository = eventRepository;
+        private readonly IPostcrossingEventProcessor _postcrossingEventProcessor = postcrossingEventProcessor;
 
-        private readonly SemaphoreSlim _semaphore;
+        private readonly SemaphoreSlim _semaphore = new(1);
 
         private long? _currentLatestPostcrossingEventId;
-
-        public PostcrossingEventService(
-            IPostcrossingEngineSettingsService postcrossingEngineSettingsService,
-            IPostcrossingClient postcrossingClient,
-            IInsightsRepository insightsRepository,
-            IEventRepository eventRepository,
-            IPostcrossingEventProcessor postcrossingEventProcessor)
-        {
-            _semaphore = new SemaphoreSlim(1);
-
-            _postcrossingEngineSettingsService = postcrossingEngineSettingsService;
-            _postcrossingClient = postcrossingClient;
-            _insightsRepository = insightsRepository;
-            _eventRepository = eventRepository;
-            _postcrossingEventProcessor = postcrossingEventProcessor;
-        }
 
         public async Task<IEnumerable<EventBase>> GetLatestEventsAsync(PostcrossingEventTypeEnum postcrossingEventType = PostcrossingEventTypeEnum.All, long? fromPostcrossingEventId = null)
         {

@@ -10,7 +10,7 @@ namespace abremir.postcrossing.engine.tests.Repositories
     [TestClass]
     public class PostcardRepositoryTests : DataTestsBase
     {
-        private readonly IPostcardRepository _postcardRepository;
+        private readonly PostcardRepository _postcardRepository;
 
         public PostcardRepositoryTests()
         {

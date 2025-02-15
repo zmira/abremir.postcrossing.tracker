@@ -11,7 +11,7 @@ namespace abremir.postcrossing.tracker
         {
             var serviceCollection = new ServiceCollection();
 
-            PostcrossingEngineRegistration.RegisterPostcrossingEngine(serviceCollection);
+            serviceCollection.RegisterPostcrossingEngine();
 
             ServiceProvider = serviceCollection.BuildServiceProvider();
         }

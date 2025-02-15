@@ -1,18 +1,18 @@
-﻿using abremir.postcrossing.engine.Assets;
+﻿using System.Linq;
+using abremir.postcrossing.engine.Assets;
 using abremir.postcrossing.engine.Helpers;
 using abremir.postcrossing.engine.Models.PostcrossingEvents;
 using abremir.postcrossing.engine.Repositories;
 using abremir.postcrossing.engine.tests.Configuration;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NFluent;
-using System.Linq;
 
 namespace abremir.postcrossing.engine.tests.Repositories
 {
     [TestClass]
     public class EventRepositoryTests : DataTestsBase
     {
-        private readonly IEventRepository _eventRepository;
+        private readonly EventRepository _eventRepository;
 
         public EventRepositoryTests()
         {

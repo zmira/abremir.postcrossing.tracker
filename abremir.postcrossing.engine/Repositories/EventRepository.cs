@@ -11,22 +11,16 @@ using LiteDB;
 
 namespace abremir.postcrossing.engine.Repositories
 {
-    public class EventRepository : IEventRepository
+    public class EventRepository(
+        IRepositoryService repositoryService,
+        IEventComposer eventComposer) : IEventRepository
     {
-        private readonly IRepositoryService _repositoryService;
-        private readonly IEventComposer _eventComposer;
-
-        public EventRepository(
-            IRepositoryService repositoryService,
-            IEventComposer eventComposer)
-        {
-            _repositoryService = repositoryService;
-            _eventComposer = eventComposer;
-        }
+        private readonly IRepositoryService _repositoryService = repositoryService;
+        private readonly IEventComposer _eventComposer = eventComposer;
 
         public EventBase Add(EventBase postcrossingEvent)
         {
-            return Add(new[] { postcrossingEvent }).FirstOrDefault();
+            return Add([postcrossingEvent]).FirstOrDefault();
         }
 
         public IEnumerable<EventBase> Add(IEnumerable<EventBase> postcrossingEvents)
@@ -96,7 +90,7 @@ namespace abremir.postcrossing.engine.Repositories
 
             if (associatedEventType == null)
             {
-                return Enumerable.Empty<T>();
+                return [];
             }
 
             using var repository = _repositoryService.GetRepository();
@@ -106,7 +100,7 @@ namespace abremir.postcrossing.engine.Repositories
                 .ToList();
         }
 
-        private ILiteQueryable<T> GetQueryable<T>(ILiteRepository repository) where T : EventBase
+        private static ILiteQueryable<T> GetQueryable<T>(ILiteRepository repository) where T : EventBase
         {
             if (typeof(T) == typeof(Register))
             {

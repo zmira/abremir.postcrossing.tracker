@@ -1,16 +1,16 @@
-﻿using abremir.postcrossing.engine.Models;
+﻿using System.Linq;
+using abremir.postcrossing.engine.Models;
 using abremir.postcrossing.engine.Repositories;
 using abremir.postcrossing.engine.tests.Configuration;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NFluent;
-using System.Linq;
 
 namespace abremir.postcrossing.engine.tests.Repositories
 {
     [TestClass]
     public class UserRepositoryTests : DataTestsBase
     {
-        private readonly IUserRepository _userRepository;
+        private readonly UserRepository _userRepository;
 
         public UserRepositoryTests()
         {

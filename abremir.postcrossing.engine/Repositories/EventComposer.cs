@@ -3,37 +3,25 @@ using abremir.postcrossing.engine.Models.PostcrossingEvents;
 
 namespace abremir.postcrossing.engine.Repositories
 {
-    public class EventComposer : IEventComposer
+    public class EventComposer(
+        ICountryRepository countryRepository,
+        IUserRepository userRepository,
+        IPostcardRepository postcardRepository) : IEventComposer
     {
-        private readonly ICountryRepository _countryRepository;
-        private readonly IUserRepository _userRepository;
-        private readonly IPostcardRepository _postcardRepository;
-
-        public EventComposer(
-            ICountryRepository countryRepository,
-            IUserRepository userRepository,
-            IPostcardRepository postcardRepository)
-        {
-            _countryRepository = countryRepository;
-            _userRepository = userRepository;
-            _postcardRepository = postcardRepository;
-        }
+        private readonly ICountryRepository _countryRepository = countryRepository;
+        private readonly IUserRepository _userRepository = userRepository;
+        private readonly IPostcardRepository _postcardRepository = postcardRepository;
 
         public T ComposeEvent<T>(EventBase postcrossingEvent) where T : EventBase
         {
-            switch (postcrossingEvent.EventType)
+            return postcrossingEvent.EventType switch
             {
-                case PostcrossingEventTypeEnum.Register:
-                    return ComposeRegister(postcrossingEvent as Register) as T;
-                case PostcrossingEventTypeEnum.Send:
-                    return ComposeSend(postcrossingEvent as Send) as T;
-                case PostcrossingEventTypeEnum.SignUp:
-                    return ComposeSignUp(postcrossingEvent as SignUp) as T;
-                case PostcrossingEventTypeEnum.Upload:
-                    return ComposeUpload(postcrossingEvent as Upload) as T;
-                default:
-                    return null;
-            }
+                PostcrossingEventTypeEnum.Register => ComposeRegister(postcrossingEvent as Register) as T,
+                PostcrossingEventTypeEnum.Send => ComposeSend(postcrossingEvent as Send) as T,
+                PostcrossingEventTypeEnum.SignUp => ComposeSignUp(postcrossingEvent as SignUp) as T,
+                PostcrossingEventTypeEnum.Upload => ComposeUpload(postcrossingEvent as Upload) as T,
+                _ => null,
+            };
         }
 
         private Register ComposeRegister(Register postcrossingEvent)

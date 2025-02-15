@@ -1,4 +1,8 @@
-﻿using abremir.postcrossing.engine.Models.Enumerations;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Threading;
+using System.Timers;
+using abremir.postcrossing.engine.Models.Enumerations;
 using abremir.postcrossing.engine.Models.PostcrossingEvents;
 using abremir.postcrossing.engine.Services;
 using Avalonia.Controls;
@@ -7,18 +11,14 @@ using Avalonia.Interactivity;
 using Avalonia.Threading;
 using AvaloniaProgressRing;
 using Microsoft.Extensions.DependencyInjection;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Threading;
-using System.Timers;
 using Timer = System.Timers.Timer;
 
 namespace abremir.postcrossing.tracker.ViewModels
 {
     public class MainWindowViewModel : ViewModelBase
     {
-        public ObservableCollection<Send> PostcrossingEventsSend { get; } = new ObservableCollection<Send>(new List<Send>());
-        public ObservableCollection<Register> PostcrossingEventsRegister { get; } = new ObservableCollection<Register>(new List<Register>());
+        public static ObservableCollection<Send> PostcrossingEventsSend { get; } = [.. new List<Send>()];
+        public static ObservableCollection<Register> PostcrossingEventsRegister { get; } = [.. new List<Register>()];
 
         private readonly ToggleButton _persistToggle;
         private readonly ToggleButton _trackingToggle;
@@ -52,7 +52,7 @@ namespace abremir.postcrossing.tracker.ViewModels
 
         private void OnTrackingToggleClick(object sender, RoutedEventArgs e)
         {
-            if (!(sender is ToggleButton toggleButton))
+            if (sender is not ToggleButton toggleButton)
             {
                 return;
             }
@@ -78,7 +78,7 @@ namespace abremir.postcrossing.tracker.ViewModels
 
         private void OnPersistToggleClick(object sender, RoutedEventArgs e)
         {
-            if (!(sender is ToggleButton toggleButton))
+            if (sender is not ToggleButton toggleButton)
             {
                 return;
             }

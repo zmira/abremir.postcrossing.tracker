@@ -1,21 +1,16 @@
-﻿using abremir.postcrossing.engine.Assets;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq.Expressions;
+using abremir.postcrossing.engine.Assets;
 using abremir.postcrossing.engine.Extensions;
 using abremir.postcrossing.engine.Models;
 using abremir.postcrossing.engine.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq.Expressions;
 
 namespace abremir.postcrossing.engine.Repositories
 {
-    public class CountryRepository : ICountryRepository
+    public class CountryRepository(IRepositoryService repositoryService) : ICountryRepository
     {
-        private readonly IRepositoryService _repositoryService;
-
-        public CountryRepository(IRepositoryService repositoryService)
-        {
-            _repositoryService = repositoryService;
-        }
+        private readonly IRepositoryService _repositoryService = repositoryService;
 
         public Country Add(Country country)
         {

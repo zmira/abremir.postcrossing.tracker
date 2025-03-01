@@ -98,7 +98,7 @@ namespace abremir.postcrossing.tracker.ViewModels
             await _semaphore.WaitAsync();
             await Dispatcher.UIThread.InvokeAsync(() => _progressRing.IsActive = true);
 
-            foreach (var @event in await _postcrossingEventService.GetLatestEventsAsync())
+            foreach (var @event in await _postcrossingEventService.GetLatestEventsAsync().ConfigureAwait(false))
             {
                 switch (@event.EventType)
                 {

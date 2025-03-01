@@ -14,7 +14,7 @@ namespace abremir.postcrossing.engine.Clients
     {
         public async Task<IEnumerable<EventBase>> GetPostcrossingEventsAsync(long fromEventId = 0)
         {
-            return (await GetRawPostcrossingEventsAsync(fromEventId))
+            return (await GetRawPostcrossingEventsAsync(fromEventId).ConfigureAwait(false))
                 .Select(MapToEventBase)
                 .Where(@event => @event != null);
         }

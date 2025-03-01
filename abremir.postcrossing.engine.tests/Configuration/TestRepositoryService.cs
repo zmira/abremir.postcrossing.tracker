@@ -12,7 +12,6 @@ namespace abremir.postcrossing.engine.tests.Configuration
         private TempStream _tempStream;
 
         private readonly IFileSystemService _fileSystemService;
-        private readonly ILiteRepositoryAsync _repository;
 
         public TestRepositoryService()
         {

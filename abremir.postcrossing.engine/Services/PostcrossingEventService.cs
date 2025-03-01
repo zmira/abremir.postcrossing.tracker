@@ -31,19 +31,19 @@ namespace abremir.postcrossing.engine.Services
 
             try
             {
-                var currentLatestPostcrossingEventId = GetLatestPostcrossingEventId();
+                var currentLatestPostcrossingEventId = await GetLatestPostcrossingEventId().ConfigureAwait(false);
                 var fromPostcrossingEvent = fromPostcrossingEventId ?? currentLatestPostcrossingEventId;
 
-                var postcrossingEvents = await _postcrossingClient.GetPostcrossingEventsAsync(fromPostcrossingEvent);
+                var postcrossingEvents = await _postcrossingClient.GetPostcrossingEventsAsync(fromPostcrossingEvent).ConfigureAwait(false);
 
-                _currentLatestPostcrossingEventId = _postcrossingEventProcessor.GetLatestEventId(postcrossingEvents, currentLatestPostcrossingEventId);
+                _currentLatestPostcrossingEventId = await _postcrossingEventProcessor.GetLatestEventId(postcrossingEvents, currentLatestPostcrossingEventId).ConfigureAwait(false);
 
                 if (_postcrossingEngineSettingsService.PersistData)
                 {
-                    _eventRepository.Add(postcrossingEvents);
+                    await _eventRepository.Add(postcrossingEvents).ConfigureAwait(true);
                 }
 
-                return _postcrossingEventProcessor.BuildResultForRequestedEventType(postcrossingEventType, fromPostcrossingEvent, postcrossingEvents);
+                return await _postcrossingEventProcessor.BuildResultForRequestedEventType(postcrossingEventType, fromPostcrossingEvent, postcrossingEvents).ConfigureAwait(false);
             }
             finally
             {
@@ -51,10 +51,10 @@ namespace abremir.postcrossing.engine.Services
             }
         }
 
-        private long GetLatestPostcrossingEventId()
+        private async Task<long> GetLatestPostcrossingEventId()
         {
             return _currentLatestPostcrossingEventId ?? (_currentLatestPostcrossingEventId = _postcrossingEngineSettingsService.PersistData
-                    ? _insightsRepository.GetLatestPostcrossingEventId()
+                    ? await _insightsRepository.GetLatestPostcrossingEventId().ConfigureAwait(false)
                     : 1).Value;
         }
     }

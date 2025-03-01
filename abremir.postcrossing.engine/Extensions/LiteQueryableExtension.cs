@@ -4,12 +4,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using LiteDB;
+using LiteDB.Async;
 
 namespace abremir.postcrossing.engine.Extensions
 {
     public static class LiteQueryableExtension
     {
-        public static ILiteQueryable<T> IncludeAll<T>(this ILiteQueryable<T> liteQueryable) where T : class
+        public static ILiteQueryableAsync<T> IncludeAll<T>(this ILiteQueryableAsync<T> liteQueryable) where T : class
         {
             return liteQueryable.Include(GetRecursivePaths(typeof(T)));
         }
@@ -19,10 +20,10 @@ namespace abremir.postcrossing.engine.Extensions
             var fields = pathType.GetProperties()
                 .Where(property =>
                     !property.PropertyType.IsValueType
-                    && (property.GetCustomAttribute<BsonRefAttribute>() != null
+                    && (property.GetCustomAttribute<BsonRefAttribute>() is not null
                         || (typeof(IEnumerable).IsAssignableFrom(property.PropertyType) && property.PropertyType != typeof(string))));
 
-            var paths = new List<BsonExpression>();
+            List<BsonExpression> paths = [];
 
             basePath = string.IsNullOrEmpty(basePath) ? "$" : basePath;
 
@@ -32,7 +33,7 @@ namespace abremir.postcrossing.engine.Extensions
                     ? $"{basePath}.{field.Name}[*]"
                     : $"{basePath}.{field.Name}";
 
-                if (field.GetCustomAttribute<BsonRefAttribute>() != null)
+                if (field.GetCustomAttribute<BsonRefAttribute>() is not null)
                 {
                     paths.Add(path);
                 }

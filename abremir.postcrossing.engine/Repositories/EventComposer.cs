@@ -1,4 +1,5 @@
-﻿using abremir.postcrossing.engine.Models.Enumerations;
+﻿using System.Threading.Tasks;
+using abremir.postcrossing.engine.Models.Enumerations;
 using abremir.postcrossing.engine.Models.PostcrossingEvents;
 
 namespace abremir.postcrossing.engine.Repositories
@@ -12,53 +13,53 @@ namespace abremir.postcrossing.engine.Repositories
         private readonly IUserRepository _userRepository = userRepository;
         private readonly IPostcardRepository _postcardRepository = postcardRepository;
 
-        public T ComposeEvent<T>(EventBase postcrossingEvent) where T : EventBase
+        public async Task<T> ComposeEvent<T>(EventBase postcrossingEvent) where T : EventBase
         {
             return postcrossingEvent.EventType switch
             {
-                PostcrossingEventTypeEnum.Register => ComposeRegister(postcrossingEvent as Register) as T,
-                PostcrossingEventTypeEnum.Send => ComposeSend(postcrossingEvent as Send) as T,
-                PostcrossingEventTypeEnum.SignUp => ComposeSignUp(postcrossingEvent as SignUp) as T,
-                PostcrossingEventTypeEnum.Upload => ComposeUpload(postcrossingEvent as Upload) as T,
+                PostcrossingEventTypeEnum.Register => (await ComposeRegister(postcrossingEvent as Register).ConfigureAwait(false)) as T,
+                PostcrossingEventTypeEnum.Send => (await ComposeSend(postcrossingEvent as Send).ConfigureAwait(false)) as T,
+                PostcrossingEventTypeEnum.SignUp => (await ComposeSignUp(postcrossingEvent as SignUp).ConfigureAwait(false)) as T,
+                PostcrossingEventTypeEnum.Upload => (await ComposeUpload(postcrossingEvent as Upload).ConfigureAwait(false)) as T,
                 _ => null,
             };
         }
 
-        private Register ComposeRegister(Register postcrossingEvent)
+        private async Task<Register> ComposeRegister(Register postcrossingEvent)
         {
-            postcrossingEvent.User.Country = _countryRepository.GetOrAdd(postcrossingEvent.User.Country);
-            postcrossingEvent.User = _userRepository.GetOrAdd(postcrossingEvent.User);
-            postcrossingEvent.Postcard.Country = _countryRepository.GetOrAdd(postcrossingEvent.Postcard.Country);
-            postcrossingEvent.Postcard = _postcardRepository.GetOrAdd(postcrossingEvent.Postcard);
-            postcrossingEvent.FromUser.Country = _countryRepository.GetOrAdd(postcrossingEvent.FromUser.Country);
-            postcrossingEvent.FromUser = _userRepository.GetOrAdd(postcrossingEvent.FromUser);
+            postcrossingEvent.User.Country = await _countryRepository.GetOrAdd(postcrossingEvent.User.Country).ConfigureAwait(false);
+            postcrossingEvent.User = await _userRepository.GetOrAdd(postcrossingEvent.User).ConfigureAwait(false);
+            postcrossingEvent.Postcard.Country = await _countryRepository.GetOrAdd(postcrossingEvent.Postcard.Country).ConfigureAwait(false);
+            postcrossingEvent.Postcard = await _postcardRepository.GetOrAdd(postcrossingEvent.Postcard).ConfigureAwait(false);
+            postcrossingEvent.FromUser.Country = await _countryRepository.GetOrAdd(postcrossingEvent.FromUser.Country).ConfigureAwait(false);
+            postcrossingEvent.FromUser = await _userRepository.GetOrAdd(postcrossingEvent.FromUser).ConfigureAwait(false);
 
             return postcrossingEvent;
         }
 
-        private Send ComposeSend(Send postcrossingEvent)
+        private async Task<Send> ComposeSend(Send postcrossingEvent)
         {
-            postcrossingEvent.User.Country = _countryRepository.GetOrAdd(postcrossingEvent.User.Country);
-            postcrossingEvent.User = _userRepository.GetOrAdd(postcrossingEvent.User);
-            postcrossingEvent.ToCountry = _countryRepository.GetOrAdd(postcrossingEvent.ToCountry);
+            postcrossingEvent.User.Country = await _countryRepository.GetOrAdd(postcrossingEvent.User.Country).ConfigureAwait(false);
+            postcrossingEvent.User = await _userRepository.GetOrAdd(postcrossingEvent.User).ConfigureAwait(false);
+            postcrossingEvent.ToCountry = await _countryRepository.GetOrAdd(postcrossingEvent.ToCountry).ConfigureAwait(false);
 
             return postcrossingEvent;
         }
 
-        private SignUp ComposeSignUp(SignUp postcrossingEvent)
+        private async Task<SignUp> ComposeSignUp(SignUp postcrossingEvent)
         {
-            postcrossingEvent.User.Country = _countryRepository.GetOrAdd(postcrossingEvent.User.Country);
-            postcrossingEvent.User = _userRepository.GetOrAdd(postcrossingEvent.User);
+            postcrossingEvent.User.Country = await _countryRepository.GetOrAdd(postcrossingEvent.User.Country).ConfigureAwait(false);
+            postcrossingEvent.User = await _userRepository.GetOrAdd(postcrossingEvent.User).ConfigureAwait(false);
 
             return postcrossingEvent;
         }
 
-        private Upload ComposeUpload(Upload postcrossingEvent)
+        private async Task<Upload> ComposeUpload(Upload postcrossingEvent)
         {
-            postcrossingEvent.User.Country = _countryRepository.GetOrAdd(postcrossingEvent.User.Country);
-            postcrossingEvent.User = _userRepository.GetOrAdd(postcrossingEvent.User);
-            postcrossingEvent.Postcard.Country = _countryRepository.GetOrAdd(postcrossingEvent.Postcard.Country);
-            postcrossingEvent.Postcard = _postcardRepository.GetOrAdd(postcrossingEvent.Postcard);
+            postcrossingEvent.User.Country = await _countryRepository.GetOrAdd(postcrossingEvent.User.Country).ConfigureAwait(false);
+            postcrossingEvent.User = await _userRepository.GetOrAdd(postcrossingEvent.User).ConfigureAwait(false);
+            postcrossingEvent.Postcard.Country = await _countryRepository.GetOrAdd(postcrossingEvent.Postcard.Country).ConfigureAwait(false);
+            postcrossingEvent.Postcard = await _postcardRepository.GetOrAdd(postcrossingEvent.Postcard).ConfigureAwait(false);
 
             return postcrossingEvent;
         }

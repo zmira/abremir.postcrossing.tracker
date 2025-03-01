@@ -1,8 +1,10 @@
-﻿namespace abremir.postcrossing.engine.Repositories
+﻿using System.Threading.Tasks;
+
+namespace abremir.postcrossing.engine.Repositories
 {
     public interface IInsightsRepository
     {
-        long GetLatestPostcrossingEventId();
-        void SetLatestPostcrossingEventId(long eventId);
+        Task<long> GetLatestPostcrossingEventId();
+        Task SetLatestPostcrossingEventId(long eventId);
     }
 }

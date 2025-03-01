@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 using abremir.postcrossing.engine.Models;
 using abremir.postcrossing.engine.Repositories;
 using abremir.postcrossing.engine.tests.Configuration;
@@ -18,19 +19,19 @@ namespace abremir.postcrossing.engine.tests.Repositories
         }
 
         [TestMethod]
-        public void Add_NullPostcard_ReturnsNullAndDoesNotInsert()
+        public async Task Add_NullPostcard_ReturnsNullAndDoesNotInsert()
         {
-            var result = _postcardRepository.Add(null);
+            var result = await _postcardRepository.Add(null);
 
             Check.That(result).IsNull();
-            Check.That(_postcardRepository.All()).CountIs(0);
+            Check.ThatCode(_postcardRepository.All).WhichResult().IsEmpty();
         }
 
         [DataTestMethod]
         [DataRow(null)]
         [DataRow("")]
         [DataRow(" ")]
-        public void Add_InvalidPostcardId_ReturnsNullAndDoesNotInsert(string postcardId)
+        public async Task Add_InvalidPostcardId_ReturnsNullAndDoesNotInsert(string postcardId)
         {
             var postcard = new Postcard
             {
@@ -43,14 +44,14 @@ namespace abremir.postcrossing.engine.tests.Repositories
                 }
             };
 
-            var result = _postcardRepository.Add(postcard);
+            var result = await _postcardRepository.Add(postcard);
 
             Check.That(result).IsNull();
-            Check.That(_postcardRepository.All()).CountIs(0);
+            Check.ThatCode(_postcardRepository.All).WhichResult().IsEmpty();
         }
 
         [TestMethod]
-        public void Add_NullCountry_ReturnsNullAndDoesNotInsert()
+        public async Task Add_NullCountry_ReturnsNullAndDoesNotInsert()
         {
             var postcard = new Postcard
             {
@@ -58,14 +59,14 @@ namespace abremir.postcrossing.engine.tests.Repositories
                 Country = null
             };
 
-            var result = _postcardRepository.Add(postcard);
+            var result = await _postcardRepository.Add(postcard);
 
             Check.That(result).IsNull();
-            Check.That(_postcardRepository.All()).CountIs(0);
+            Check.ThatCode(_postcardRepository.All).WhichResult().IsEmpty();
         }
 
         [TestMethod]
-        public void Add_InvalidCountryId_ReturnsNullAndDoesNotInsert()
+        public async Task Add_InvalidCountryId_ReturnsNullAndDoesNotInsert()
         {
             var postcard = new Postcard
             {
@@ -78,14 +79,14 @@ namespace abremir.postcrossing.engine.tests.Repositories
                 }
             };
 
-            var result = _postcardRepository.Add(postcard);
+            var result = await _postcardRepository.Add(postcard);
 
             Check.That(result).IsNull();
-            Check.That(_postcardRepository.All()).CountIs(0);
+            Check.ThatCode(_postcardRepository.All).WhichResult().IsEmpty();
         }
 
         [TestMethod]
-        public void Add_ValidPostcard_InsertsAndReturnsPostcard()
+        public async Task Add_ValidPostcard_InsertsAndReturnsPostcard()
         {
             var country = new Country
             {
@@ -93,7 +94,7 @@ namespace abremir.postcrossing.engine.tests.Repositories
                 Name = "country name"
             };
 
-            InsertData(country);
+            await InsertData(country);
 
             var postcard = new Postcard
             {
@@ -101,24 +102,24 @@ namespace abremir.postcrossing.engine.tests.Repositories
                 Country = country
             };
 
-            var result = _postcardRepository.Add(postcard);
+            var result = await _postcardRepository.Add(postcard);
 
-            var allPostcards = _postcardRepository.All().ToList();
+            var allPostcards = (await _postcardRepository.All()).ToList();
             Check.That(result).IsNotNull();
             Check.That(allPostcards).CountIs(1);
             Check.That(allPostcards[0]).HasFieldsWithSameValues(postcard);
         }
 
         [TestMethod]
-        public void Get_PostcardDoesNotExist_ReturnsNull()
+        public async Task Get_PostcardDoesNotExist_ReturnsNull()
         {
-            var result = _postcardRepository.Get(postcard => postcard.PostcardId == "POSTCARD_ID");
+            var result = await _postcardRepository.Get(postcard => postcard.PostcardId == "POSTCARD_ID");
 
             Check.That(result).IsNull();
         }
 
         [TestMethod]
-        public void Get_PostcardExists_ReturnsPostcard()
+        public async Task Get_PostcardExists_ReturnsPostcard()
         {
             var country = new Country
             {
@@ -126,7 +127,7 @@ namespace abremir.postcrossing.engine.tests.Repositories
                 Name = "country name"
             };
 
-            InsertData(country);
+            await InsertData(country);
 
             var postcardUnderTest = new Postcard
             {
@@ -134,9 +135,9 @@ namespace abremir.postcrossing.engine.tests.Repositories
                 PostcardId = "POSTCARD_ID"
             };
 
-            InsertData(postcardUnderTest);
+            await InsertData(postcardUnderTest);
 
-            var result = _postcardRepository.Get(postcard => postcard.PostcardId == postcardUnderTest.PostcardId);
+            var result = await _postcardRepository.Get(postcard => postcard.PostcardId == postcardUnderTest.PostcardId);
 
             Check.That(result).IsNotNull();
             Check.That(result).HasFieldsWithSameValues(postcardUnderTest);

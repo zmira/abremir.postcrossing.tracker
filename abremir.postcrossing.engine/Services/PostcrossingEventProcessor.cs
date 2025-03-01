@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using abremir.postcrossing.engine.Attributes;
 using abremir.postcrossing.engine.Models.Enumerations;
 using abremir.postcrossing.engine.Models.PostcrossingEvents;
@@ -16,7 +17,7 @@ namespace abremir.postcrossing.engine.Services
         private readonly IInsightsRepository _insightsRepository = insightsRepository;
         private readonly IEventRepository _eventRepository = eventRepository;
 
-        public long GetLatestEventId(IEnumerable<EventBase> postcrossingEvents, long currentLatestPostcrossingEventId)
+        public async Task<long> GetLatestEventId(IEnumerable<EventBase> postcrossingEvents, long currentLatestPostcrossingEventId)
         {
             if (!postcrossingEvents.Any())
             {
@@ -28,45 +29,45 @@ namespace abremir.postcrossing.engine.Services
 
             if (_postcrossingEngineSettingsService.PersistData)
             {
-                _insightsRepository.SetLatestPostcrossingEventId(latestPostcrossingEventId);
+                await _insightsRepository.SetLatestPostcrossingEventId(latestPostcrossingEventId).ConfigureAwait(false);
             }
 
             return latestPostcrossingEventId;
         }
 
-        public IEnumerable<EventBase> BuildResultForRequestedEventType(PostcrossingEventTypeEnum postcrossingEventType, long fromPostcrossingEventId, IEnumerable<EventBase> postcrossingEvents)
+        public async Task<IEnumerable<EventBase>> BuildResultForRequestedEventType(PostcrossingEventTypeEnum postcrossingEventType, long fromPostcrossingEventId, IEnumerable<EventBase> postcrossingEvents)
         {
             var result = new List<EventBase>();
 
             if (postcrossingEventType.HasFlag(PostcrossingEventTypeEnum.Register))
             {
-                result.AddRange(GetEventsStartingFrom<Register>(fromPostcrossingEventId, postcrossingEvents));
+                result.AddRange(await GetEventsStartingFrom<Register>(fromPostcrossingEventId, postcrossingEvents).ConfigureAwait(false));
             }
 
             if (postcrossingEventType.HasFlag(PostcrossingEventTypeEnum.Send))
             {
-                result.AddRange(GetEventsStartingFrom<Send>(fromPostcrossingEventId, postcrossingEvents));
+                result.AddRange(await GetEventsStartingFrom<Send>(fromPostcrossingEventId, postcrossingEvents).ConfigureAwait(false));
             }
 
             if (postcrossingEventType.HasFlag(PostcrossingEventTypeEnum.SignUp))
             {
-                result.AddRange(GetEventsStartingFrom<SignUp>(fromPostcrossingEventId, postcrossingEvents));
+                result.AddRange(await GetEventsStartingFrom<SignUp>(fromPostcrossingEventId, postcrossingEvents).ConfigureAwait(false));
             }
 
             if (postcrossingEventType.HasFlag(PostcrossingEventTypeEnum.Upload))
             {
-                result.AddRange(GetEventsStartingFrom<Upload>(fromPostcrossingEventId, postcrossingEvents));
+                result.AddRange(await GetEventsStartingFrom<Upload>(fromPostcrossingEventId, postcrossingEvents).ConfigureAwait(false));
             }
 
             if (postcrossingEventType.HasFlag(PostcrossingEventTypeEnum.Unknown))
             {
-                result.AddRange(GetEventsStartingFrom<EventBase>(fromPostcrossingEventId, postcrossingEvents));
+                result.AddRange(await GetEventsStartingFrom<EventBase>(fromPostcrossingEventId, postcrossingEvents).ConfigureAwait(false));
             }
 
             return result.OrderBy(r => r.EventId);
         }
 
-        private IEnumerable<T> GetEventsStartingFrom<T>(long fromPostcrossingEventId, IEnumerable<EventBase> postcrossingEvents) where T : EventBase
+        private async Task<IEnumerable<T>> GetEventsStartingFrom<T>(long fromPostcrossingEventId, IEnumerable<EventBase> postcrossingEvents) where T : EventBase
         {
             var associatedEventType = AssociatedEventType.GetAssociatedEventType<T>();
 
@@ -76,8 +77,8 @@ namespace abremir.postcrossing.engine.Services
             }
 
             return _postcrossingEngineSettingsService.PersistData
-                ? _eventRepository
-                    .FindEventsWithIdGreaterThan<T>(fromPostcrossingEventId)
+                ? await _eventRepository
+                    .FindEventsWithIdGreaterThan<T>(fromPostcrossingEventId).ConfigureAwait(false)
                 : postcrossingEvents
                     .Where(e => e.EventType == associatedEventType && e.EventId > fromPostcrossingEventId)
                     .Select(e => e as T);

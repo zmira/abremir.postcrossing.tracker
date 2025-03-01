@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 using abremir.postcrossing.engine.Models;
 using abremir.postcrossing.engine.Repositories;
 using abremir.postcrossing.engine.tests.Configuration;
@@ -18,19 +19,19 @@ namespace abremir.postcrossing.engine.tests.Repositories
         }
 
         [TestMethod]
-        public void Add_NullCountry_ReturnsNullAndDoesNotInsert()
+        public async Task Add_NullCountry_ReturnsNullAndDoesNotInsert()
         {
-            var result = _countryRepository.Add(null);
+            var result = await _countryRepository.Add(null);
 
             Check.That(result).IsNull();
-            Check.That(_countryRepository.All()).CountIs(0);
+            Check.ThatCode(_countryRepository.All).WhichResult().IsEmpty();
         }
 
         [DataTestMethod]
         [DataRow(null)]
         [DataRow("")]
         [DataRow(" ")]
-        public void Add_InvalidName_ReturnsNullAndDoesNotInsert(string name)
+        public async Task Add_InvalidName_ReturnsNullAndDoesNotInsert(string name)
         {
             var country = new Country
             {
@@ -38,17 +39,17 @@ namespace abremir.postcrossing.engine.tests.Repositories
                 Name = name
             };
 
-            var result = _countryRepository.Add(country);
+            var result = await _countryRepository.Add(country);
 
             Check.That(result).IsNull();
-            Check.That(_countryRepository.All()).CountIs(0);
+            Check.ThatCode(_countryRepository.All).WhichResult().IsEmpty();
         }
 
         [DataTestMethod]
         [DataRow(null)]
         [DataRow("")]
         [DataRow(" ")]
-        public void Add_InvalidCode_ReturnsNullAndDoesNotInsert(string code)
+        public async Task Add_InvalidCode_ReturnsNullAndDoesNotInsert(string code)
         {
             var country = new Country
             {
@@ -56,14 +57,14 @@ namespace abremir.postcrossing.engine.tests.Repositories
                 Name = "country name"
             };
 
-            var result = _countryRepository.Add(country);
+            var result = await _countryRepository.Add(country);
 
             Check.That(result).IsNull();
-            Check.That(_countryRepository.All()).CountIs(0);
+            Check.ThatCode(_countryRepository.All).WhichResult().IsEmpty();
         }
 
         [TestMethod]
-        public void Add_ValidCountryModel_InsertsAndReturnsCountry()
+        public async Task Add_ValidCountryModel_InsertsAndReturnsCountry()
         {
             var country = new Country
             {
@@ -71,24 +72,24 @@ namespace abremir.postcrossing.engine.tests.Repositories
                 Name = "country name"
             };
 
-            var result = _countryRepository.Add(country);
+            var result = await _countryRepository.Add(country);
 
-            var allCountries = _countryRepository.All().ToList();
+            var allCountries = (await _countryRepository.All()).ToList();
             Check.That(result).IsNotNull();
             Check.That(allCountries).CountIs(1);
             Check.That(allCountries[0]).HasFieldsWithSameValues(country);
         }
 
         [TestMethod]
-        public void Get_CountryDoesNotExist_ReturnsNull()
+        public async Task Get_CountryDoesNotExist_ReturnsNull()
         {
-            var result = _countryRepository.Get(country => country.Code == "XX");
+            var result = await _countryRepository.Get(country => country.Code == "XX");
 
             Check.That(result).IsNull();
         }
 
         [TestMethod]
-        public void Get_CountryExists_ReturnsCountry()
+        public async Task Get_CountryExists_ReturnsCountry()
         {
             var countryUnderTest = new Country
             {
@@ -96,9 +97,9 @@ namespace abremir.postcrossing.engine.tests.Repositories
                 Name = "country name"
             };
 
-            InsertData(countryUnderTest);
+            await InsertData(countryUnderTest);
 
-            var result = _countryRepository.Get(country => country.Code == countryUnderTest.Code);
+            var result = await _countryRepository.Get(country => country.Code == countryUnderTest.Code);
 
             Check.That(result).IsNotNull();
             Check.That(result).HasFieldsWithSameValues(countryUnderTest);

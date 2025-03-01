@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 using abremir.postcrossing.engine.Models;
 using abremir.postcrossing.engine.Repositories;
 using abremir.postcrossing.engine.tests.Configuration;
@@ -18,19 +19,19 @@ namespace abremir.postcrossing.engine.tests.Repositories
         }
 
         [TestMethod]
-        public void Add_NullUser_ReturnsNullAndDoesNotInsert()
+        public async Task Add_NullUser_ReturnsNullAndDoesNotInsert()
         {
-            var result = _userRepository.Add(null);
+            var result = await _userRepository.Add(null);
 
             Check.That(result).IsNull();
-            Check.That(_userRepository.All()).CountIs(0);
+            Check.ThatCode(_userRepository.All).WhichResult().IsEmpty();
         }
 
         [DataTestMethod]
         [DataRow(null)]
         [DataRow("")]
         [DataRow(" ")]
-        public void Add_InvalidName_ReturnsNullAndDoesNotInsert(string name)
+        public async Task Add_InvalidName_ReturnsNullAndDoesNotInsert(string name)
         {
             var user = new User
             {
@@ -43,14 +44,14 @@ namespace abremir.postcrossing.engine.tests.Repositories
                 }
             };
 
-            var result = _userRepository.Add(user);
+            var result = await _userRepository.Add(user);
 
             Check.That(result).IsNull();
-            Check.That(_userRepository.All()).CountIs(0);
+            Check.ThatCode(_userRepository.All).WhichResult().IsEmpty();
         }
 
         [TestMethod]
-        public void Add_NullCountry_ReturnsNullAndDoesNotInsert()
+        public async Task Add_NullCountry_ReturnsNullAndDoesNotInsert()
         {
             var user = new User
             {
@@ -58,14 +59,14 @@ namespace abremir.postcrossing.engine.tests.Repositories
                 Country = null
             };
 
-            var result = _userRepository.Add(user);
+            var result = await _userRepository.Add(user);
 
             Check.That(result).IsNull();
-            Check.That(_userRepository.All()).CountIs(0);
+            Check.ThatCode(_userRepository.All).WhichResult().IsEmpty();
         }
 
         [TestMethod]
-        public void Add_InvalidCountryId_ReturnsNullAndDoesNotInsert()
+        public async Task Add_InvalidCountryId_ReturnsNullAndDoesNotInsert()
         {
             var user = new User
             {
@@ -78,14 +79,14 @@ namespace abremir.postcrossing.engine.tests.Repositories
                 }
             };
 
-            var result = _userRepository.Add(user);
+            var result = await _userRepository.Add(user);
 
             Check.That(result).IsNull();
-            Check.That(_userRepository.All()).CountIs(0);
+            Check.ThatCode(_userRepository.All).WhichResult().IsEmpty();
         }
 
         [TestMethod]
-        public void Add_ValidUser_InsertsAndReturnsUser()
+        public async Task Add_ValidUser_InsertsAndReturnsUser()
         {
             var country = new Country
             {
@@ -93,7 +94,7 @@ namespace abremir.postcrossing.engine.tests.Repositories
                 Name = "country name"
             };
 
-            InsertData(country);
+            await InsertData(country);
 
             var user = new User
             {
@@ -101,24 +102,24 @@ namespace abremir.postcrossing.engine.tests.Repositories
                 Country = country
             };
 
-            var result = _userRepository.Add(user);
+            var result = await _userRepository.Add(user);
 
-            var allUsers = _userRepository.All().ToList();
+            var allUsers = (await _userRepository.All()).ToList();
             Check.That(result).IsNotNull();
             Check.That(allUsers).CountIs(1);
             Check.That(allUsers[0]).HasFieldsWithSameValues(user);
         }
 
         [TestMethod]
-        public void Get_UserDoesNotExist_ReturnsNull()
+        public async Task Get_UserDoesNotExist_ReturnsNull()
         {
-            var result = _userRepository.Get(user => user.Name == "USERNAME");
+            var result = await _userRepository.Get(user => user.Name == "USERNAME");
 
             Check.That(result).IsNull();
         }
 
         [TestMethod]
-        public void Get_UserExists_ReturnsUser()
+        public async Task Get_UserExists_ReturnsUser()
         {
             var country = new Country
             {
@@ -126,7 +127,7 @@ namespace abremir.postcrossing.engine.tests.Repositories
                 Name = "country name"
             };
 
-            InsertData(country);
+            await InsertData(country);
 
             var userUnderTest = new User
             {
@@ -134,9 +135,9 @@ namespace abremir.postcrossing.engine.tests.Repositories
                 Name = "USERNAME"
             };
 
-            InsertData(userUnderTest);
+            await InsertData(userUnderTest);
 
-            var result = _userRepository.Get(user => user.Name == userUnderTest.Name);
+            var result = await _userRepository.Get(user => user.Name == userUnderTest.Name);
 
             Check.That(result).IsNotNull();
             Check.That(result).HasFieldsWithSameValues(userUnderTest);

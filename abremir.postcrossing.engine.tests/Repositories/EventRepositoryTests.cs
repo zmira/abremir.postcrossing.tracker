@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 using abremir.postcrossing.engine.Assets;
 using abremir.postcrossing.engine.Helpers;
 using abremir.postcrossing.engine.Models.PostcrossingEvents;
@@ -27,17 +28,17 @@ namespace abremir.postcrossing.engine.tests.Repositories
         [DataRow(null)]
         [DataRow("")]
         [DataRow(" ")]
-        public void Add_NoRawEvent_DoesNotInsert(string rawEvent)
+        public async Task Add_NoRawEvent_DoesNotInsert(string rawEvent)
         {
             var postcrossingEvent = new EventBase
             {
                 RawEvent = rawEvent
             };
 
-            var result = _eventRepository.Add(postcrossingEvent);
+            var result = await _eventRepository.Add(postcrossingEvent);
 
             Check.That(result).IsNull();
-            Check.That(MemoryRepositoryService.GetRepository().Database.GetCollection(PostcrossingTrackerConstants.EventCollectionName).Count()).IsEqualTo(0);
+            Check.ThatCode(MemoryRepositoryService.GetRepository().Database.GetCollection(PostcrossingTrackerConstants.EventCollectionName).CountAsync).WhichResult().Is(0);
         }
 
         [DataTestMethod]
@@ -46,49 +47,49 @@ namespace abremir.postcrossing.engine.tests.Repositories
         [DataRow(@"<a title=""country flag"" href=""/country/XX""><i class=""flag flag-XX""></i></a> <a href=""/user/user"">user</a> sent a postcard to <i title=""country flag"" class=""flag flag-XX""></i> <a href=""/country/XX"">country</a>")]
         [DataRow(@"<a href =""/user/user"">user</a> from <i title=""country flag"" class=""flag flag-XX""></i> <a href=""/country/XX"">country</a> just signed up")]
         [DataRow(@"<a title=""country flag"" href=""/country/XX""><i class=""flag flag-XX""></i></a> <a href=""/user/user"">user</a> uploaded postcard <a title=""country flag"" href=""/country/XX""><i class=""flag flag-XX""></i></a> <a href=""/postcards/postcard"">card</a>")]
-        public void Add_ValidEvent_Inserts(string rawEvent)
+        public async Task Add_ValidEvent_Inserts(string rawEvent)
         {
             var postcrossingEvent = EventBaseHelper.MapToEventBase(rawEvent);
 
-            var result = _eventRepository.Add(postcrossingEvent);
+            var result = await _eventRepository.Add(postcrossingEvent);
 
             Check.That(result).Not.IsNull();
-            Check.That(MemoryRepositoryService.GetRepository().Database.GetCollection(PostcrossingTrackerConstants.EventCollectionName).Count()).IsEqualTo(1);
+            Check.ThatCode(MemoryRepositoryService.GetRepository().Database.GetCollection(PostcrossingTrackerConstants.EventCollectionName).CountAsync).WhichResult().IsEqualTo(1);
         }
 
         [TestMethod]
-        public void Get_EventDoesNotExist_ReturnsNull()
+        public async Task Get_EventDoesNotExist_ReturnsNull()
         {
-            var result = _eventRepository.Get<SignUp>(5);
+            var result = await _eventRepository.Get<SignUp>(5);
 
             Check.That(result).IsNull();
         }
 
         [TestMethod]
-        public void Get_EventExists_ReturnsEvent()
+        public async Task Get_EventExists_ReturnsEvent()
         {
             var postcrossingEvent = EventBaseHelper.MapToEventBase(@"Account closed for <a href=""/user/user"">user</a> from  <i title=""country"" class=""flag flag-XX""></i> <a href=""/country/XX"">country</a>");
             postcrossingEvent.EventId = 999;
 
-            _eventRepository.Add(postcrossingEvent);
+            await _eventRepository.Add(postcrossingEvent);
 
-            var result = _eventRepository.Get<EventBase>(postcrossingEvent.EventId);
+            var result = await _eventRepository.Get<EventBase>(postcrossingEvent.EventId);
 
             Check.That(result).IsNotNull();
         }
 
         [TestMethod]
-        public void FindEventsWithIdGreaterThan_()
+        public async Task FindEventsWithIdGreaterThan_()
         {
             var postcrossingEvent1 = EventBaseHelper.MapToEventBase(@"Account closed for <a href=""/user/user1"">user1</a> from  <i title=""country"" class=""flag flag-YY""></i> <a href=""/country/YY"">countryYY</a>");
             postcrossingEvent1.EventId = 998;
             var postcrossingEvent2 = EventBaseHelper.MapToEventBase(@"Account closed for <a href=""/user/user2"">user2</a> from  <i title=""country"" class=""flag flag-XX""></i> <a href=""/country/XX"">countryXX</a>");
             postcrossingEvent2.EventId = 999;
 
-            _eventRepository.Add(postcrossingEvent1);
-            _eventRepository.Add(postcrossingEvent2);
+            await _eventRepository.Add(postcrossingEvent1);
+            await _eventRepository.Add(postcrossingEvent2);
 
-            var result = _eventRepository.FindEventsWithIdGreaterThan<EventBase>(postcrossingEvent1.EventId);
+            var result = await _eventRepository.FindEventsWithIdGreaterThan<EventBase>(postcrossingEvent1.EventId);
 
             Check.That(result).Not.IsEmpty();
             Check.That(result).CountIs(1);

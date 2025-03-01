@@ -1,15 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using abremir.postcrossing.engine.Models;
 
 namespace abremir.postcrossing.engine.Repositories
 {
     public interface IPostcardRepository
     {
-        Postcard Add(Postcard postcard);
-        IEnumerable<Postcard> All();
-        Postcard Get(Expression<Func<Postcard, bool>> predicate);
-        Postcard GetOrAdd(Postcard postcard);
+        Task<Postcard> Add(Postcard postcard);
+        Task<IEnumerable<Postcard>> All();
+        Task<Postcard> Get(Expression<Func<Postcard, bool>> predicate);
+        Task<Postcard> GetOrAdd(Postcard postcard);
     }
 }

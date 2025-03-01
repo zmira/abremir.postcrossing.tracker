@@ -1,4 +1,4 @@
-﻿using System.Linq;
+﻿using System.Threading.Tasks;
 using abremir.postcrossing.engine.Services;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -19,16 +19,16 @@ namespace abremir.postcrossing.engine.tests.Configuration
             ResetDatabase();
         }
 
-        protected static T InsertData<T>(T dataToInsert)
+        protected static async Task<T> InsertData<T>(T dataToInsert)
         {
-            return InsertData([dataToInsert]).First();
+            return (await InsertData([dataToInsert]).ConfigureAwait(false))[0];
         }
 
-        protected static T[] InsertData<T>(T[] dataToInsert)
+        protected static async Task<T[]> InsertData<T>(T[] dataToInsert)
         {
             using var repository = MemoryRepositoryService.GetRepository();
 
-            repository.Insert<T>(dataToInsert);
+            await repository.InsertAsync<T>(dataToInsert).ConfigureAwait(false);
 
             return dataToInsert;
         }

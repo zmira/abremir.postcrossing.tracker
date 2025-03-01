@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using abremir.postcrossing.engine.Assets;
 using abremir.postcrossing.engine.Attributes;
 using abremir.postcrossing.engine.Extensions;
@@ -8,6 +9,7 @@ using abremir.postcrossing.engine.Models.Enumerations;
 using abremir.postcrossing.engine.Models.PostcrossingEvents;
 using abremir.postcrossing.engine.Services;
 using LiteDB;
+using LiteDB.Async;
 
 namespace abremir.postcrossing.engine.Repositories
 {
@@ -18,15 +20,14 @@ namespace abremir.postcrossing.engine.Repositories
         private readonly IRepositoryService _repositoryService = repositoryService;
         private readonly IEventComposer _eventComposer = eventComposer;
 
-        public EventBase Add(EventBase postcrossingEvent)
+        public async Task<EventBase> Add(EventBase postcrossingEvent)
         {
-            return Add([postcrossingEvent]).FirstOrDefault();
+            return (await Add([postcrossingEvent]).ConfigureAwait(false)).FirstOrDefault();
         }
 
-        public IEnumerable<EventBase> Add(IEnumerable<EventBase> postcrossingEvents)
+        public async Task<IEnumerable<EventBase>> Add(IEnumerable<EventBase> postcrossingEvents)
         {
             var result = new List<EventBase>();
-            using var repository = _repositoryService.GetRepository();
 
             foreach (var postcrossingEvent in postcrossingEvents)
             {
@@ -37,30 +38,17 @@ namespace abremir.postcrossing.engine.Repositories
 
                 postcrossingEvent.Timestamp = DateTimeOffset.Now;
 
-                EventBase @event;
-                switch (postcrossingEvent.EventType)
+                EventBase @event = postcrossingEvent.EventType switch
                 {
-                    case PostcrossingEventTypeEnum.Register:
-                        @event = _eventComposer.ComposeEvent<Register>(postcrossingEvent);
-                        repository.Insert(@event, PostcrossingTrackerConstants.EventCollectionName);
-                        break;
-                    case PostcrossingEventTypeEnum.Send:
-                        @event = _eventComposer.ComposeEvent<Send>(postcrossingEvent);
-                        repository.Insert(@event, PostcrossingTrackerConstants.EventCollectionName);
-                        break;
-                    case PostcrossingEventTypeEnum.SignUp:
-                        @event = _eventComposer.ComposeEvent<SignUp>(postcrossingEvent);
-                        repository.Insert(@event, PostcrossingTrackerConstants.EventCollectionName);
-                        break;
-                    case PostcrossingEventTypeEnum.Upload:
-                        @event = _eventComposer.ComposeEvent<Upload>(postcrossingEvent);
-                        repository.Insert(@event, PostcrossingTrackerConstants.EventCollectionName);
-                        break;
-                    default:
-                        @event = postcrossingEvent;
-                        repository.Insert(@event, PostcrossingTrackerConstants.EventCollectionName);
-                        break;
-                }
+                    PostcrossingEventTypeEnum.Register => await _eventComposer.ComposeEvent<Register>(postcrossingEvent).ConfigureAwait(false),
+                    PostcrossingEventTypeEnum.Send => await _eventComposer.ComposeEvent<Send>(postcrossingEvent).ConfigureAwait(false),
+                    PostcrossingEventTypeEnum.SignUp => await _eventComposer.ComposeEvent<SignUp>(postcrossingEvent).ConfigureAwait(false),
+                    PostcrossingEventTypeEnum.Upload => await _eventComposer.ComposeEvent<Upload>(postcrossingEvent).ConfigureAwait(false),
+                    _ => postcrossingEvent,
+                };
+
+                using var repository = _repositoryService.GetRepository();
+                await repository.InsertAsync(@event, PostcrossingTrackerConstants.EventCollectionName).ConfigureAwait(false);
 
                 result.Add(@event);
             }
@@ -68,7 +56,7 @@ namespace abremir.postcrossing.engine.Repositories
             return result;
         }
 
-        public T Get<T>(long eventId) where T : EventBase
+        public async Task<T> Get<T>(long eventId) where T : EventBase
         {
             var associatedEventType = AssociatedEventType.GetAssociatedEventType<T>();
 
@@ -79,12 +67,12 @@ namespace abremir.postcrossing.engine.Repositories
 
             using var repository = _repositoryService.GetRepository();
 
-            return GetQueryable<T>(repository)
+            return await GetQueryable<T>(repository)
                 .Where(postcrossingEvent => postcrossingEvent.EventType == associatedEventType && postcrossingEvent.EventId == eventId)
-                .FirstOrDefault();
+                .FirstOrDefaultAsync().ConfigureAwait(false);
         }
 
-        public IEnumerable<T> FindEventsWithIdGreaterThan<T>(long eventId) where T : EventBase
+        public async Task<IEnumerable<T>> FindEventsWithIdGreaterThan<T>(long eventId) where T : EventBase
         {
             var associatedEventType = AssociatedEventType.GetAssociatedEventType<T>();
 
@@ -95,43 +83,43 @@ namespace abremir.postcrossing.engine.Repositories
 
             using var repository = _repositoryService.GetRepository();
 
-            return GetQueryable<T>(repository)
+            return await GetQueryable<T>(repository)
                 .Where(postcrossingEvent => postcrossingEvent.EventType == associatedEventType && postcrossingEvent.EventId > eventId)
-                .ToList();
+                .ToListAsync().ConfigureAwait(false);
         }
 
-        private static ILiteQueryable<T> GetQueryable<T>(ILiteRepository repository) where T : EventBase
+        private ILiteQueryableAsync<T> GetQueryable<T>(ILiteRepositoryAsync repository) where T : EventBase
         {
             if (typeof(T) == typeof(Register))
             {
                 return repository
                     .Query<Register>(PostcrossingTrackerConstants.EventCollectionName)
-                    .IncludeAll() as ILiteQueryable<T>;
+                    .IncludeAll() as ILiteQueryableAsync<T>;
             }
 
             if (typeof(T) == typeof(Send))
             {
                 return repository
                     .Query<Send>(PostcrossingTrackerConstants.EventCollectionName)
-                    .IncludeAll() as ILiteQueryable<T>;
+                    .IncludeAll() as ILiteQueryableAsync<T>;
             }
 
             if (typeof(T) == typeof(SignUp))
             {
                 return repository
                     .Query<SignUp>(PostcrossingTrackerConstants.EventCollectionName)
-                    .IncludeAll() as ILiteQueryable<T>;
+                    .IncludeAll() as ILiteQueryableAsync<T>;
             }
 
             if (typeof(T) == typeof(Upload))
             {
                 return repository
                     .Query<Upload>(PostcrossingTrackerConstants.EventCollectionName)
-                    .IncludeAll() as ILiteQueryable<T>;
+                    .IncludeAll() as ILiteQueryableAsync<T>;
             }
 
             return repository
-                .Query<EventBase>(PostcrossingTrackerConstants.EventCollectionName) as ILiteQueryable<T>;
+                .Query<EventBase>(PostcrossingTrackerConstants.EventCollectionName) as ILiteQueryableAsync<T>;
         }
     }
 }

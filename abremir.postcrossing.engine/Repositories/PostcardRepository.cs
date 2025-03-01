@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using abremir.postcrossing.engine.Assets;
 using abremir.postcrossing.engine.Extensions;
 using abremir.postcrossing.engine.Models;
 using abremir.postcrossing.engine.Services;
-using LiteDB;
+using LiteDB.Async;
 
 namespace abremir.postcrossing.engine.Repositories
 {
@@ -13,7 +14,7 @@ namespace abremir.postcrossing.engine.Repositories
     {
         private readonly IRepositoryService _repositoryService = repositoryService;
 
-        public Postcard Add(Postcard postcard)
+        public async Task<Postcard> Add(Postcard postcard)
         {
             if (postcard == null
                 || string.IsNullOrWhiteSpace(postcard.PostcardId)
@@ -25,38 +26,35 @@ namespace abremir.postcrossing.engine.Repositories
 
             using var repository = _repositoryService.GetRepository();
 
-            repository.Insert(postcard, PostcrossingTrackerConstants.PostcardCollectionName);
+            await repository.InsertAsync(postcard, PostcrossingTrackerConstants.PostcardCollectionName).ConfigureAwait(false);
 
             return postcard;
         }
 
-        public IEnumerable<Postcard> All()
+        public async Task<IEnumerable<Postcard>> All()
         {
             using var repository = _repositoryService.GetRepository();
 
-            return GetQueryable(repository)
-                .ToList();
+            return await GetQueryable(repository)
+                .ToListAsync().ConfigureAwait(false);
         }
 
-        public Postcard Get(Expression<Func<Postcard, bool>> predicate)
+        public async Task<Postcard> Get(Expression<Func<Postcard, bool>> predicate)
         {
             using var repository = _repositoryService.GetRepository();
 
-            return GetQueryable(repository)
+            return await GetQueryable(repository)
                 .Where(predicate)
-                .FirstOrDefault();
+                .FirstOrDefaultAsync().ConfigureAwait(false);
         }
 
-        public Postcard GetOrAdd(Postcard postcard)
+        public async Task<Postcard> GetOrAdd(Postcard postcard)
         {
-            return Get(postcardModel => postcardModel.PostcardId == postcard.PostcardId) ?? Add(postcard);
+            return await Get(postcardModel => postcardModel.PostcardId == postcard.PostcardId).ConfigureAwait(false) ?? await Add(postcard).ConfigureAwait(false);
         }
 
-        private static ILiteQueryable<Postcard> GetQueryable(ILiteRepository repository)
-        {
-            return repository
+        private static ILiteQueryableAsync<Postcard> GetQueryable(ILiteRepositoryAsync repository) => repository
                 .Query<Postcard>(PostcrossingTrackerConstants.PostcardCollectionName)
                 .IncludeAll();
-        }
     }
 }

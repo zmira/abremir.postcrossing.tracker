@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using abremir.postcrossing.engine.Assets;
 using abremir.postcrossing.engine.Models;
 using abremir.postcrossing.engine.Services;
@@ -11,7 +12,7 @@ namespace abremir.postcrossing.engine.Repositories
     {
         private readonly IRepositoryService _repositoryService = repositoryService;
 
-        public Country Add(Country country)
+        public async Task<Country> Add(Country country)
         {
             if (country == null
                 || string.IsNullOrWhiteSpace(country.Name)
@@ -22,28 +23,28 @@ namespace abremir.postcrossing.engine.Repositories
 
             using var repository = _repositoryService.GetRepository();
 
-            repository.Insert(country, PostcrossingTrackerConstants.CountryCollectionName);
+            await repository.InsertAsync(country, PostcrossingTrackerConstants.CountryCollectionName).ConfigureAwait(false);
 
             return country;
         }
 
-        public IEnumerable<Country> All()
+        public async Task<IEnumerable<Country>> All()
         {
             using var repository = _repositoryService.GetRepository();
 
-            return repository.Fetch<Country>("1 = 1", PostcrossingTrackerConstants.CountryCollectionName);
+            return await repository.FetchAsync<Country>("1 = 1", PostcrossingTrackerConstants.CountryCollectionName).ConfigureAwait(false);
         }
 
-        public Country Get(Expression<Func<Country, bool>> predicate)
+        public async Task<Country> Get(Expression<Func<Country, bool>> predicate)
         {
             using var repository = _repositoryService.GetRepository();
 
-            return repository.FirstOrDefault(predicate, PostcrossingTrackerConstants.CountryCollectionName);
+            return await repository.FirstOrDefaultAsync(predicate, PostcrossingTrackerConstants.CountryCollectionName).ConfigureAwait(false);
         }
 
-        public Country GetOrAdd(Country country)
+        public async Task<Country> GetOrAdd(Country country)
         {
-            return Get(countryModel => countryModel.Code == country.Code) ?? Add(country);
+            return await Get(countryModel => countryModel.Code == country.Code).ConfigureAwait(false) ?? await Add(country).ConfigureAwait(false);
         }
     }
 }

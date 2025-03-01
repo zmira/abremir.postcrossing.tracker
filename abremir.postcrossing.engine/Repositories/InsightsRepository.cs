@@ -1,4 +1,5 @@
-﻿using abremir.postcrossing.engine.Assets;
+﻿using System.Threading.Tasks;
+using abremir.postcrossing.engine.Assets;
 using abremir.postcrossing.engine.Models;
 using abremir.postcrossing.engine.Services;
 
@@ -8,26 +9,26 @@ namespace abremir.postcrossing.engine.Repositories
     {
         private readonly IRepositoryService _repositoryService = repositoryService;
 
-        public long GetLatestPostcrossingEventId()
+        public async Task<long> GetLatestPostcrossingEventId()
         {
-            return GetInsights()?.LatestPostcrossingEventId ?? 0;
+            return (await GetInsights().ConfigureAwait(false))?.LatestPostcrossingEventId ?? 0;
         }
 
-        public void SetLatestPostcrossingEventId(long eventId)
+        public async Task SetLatestPostcrossingEventId(long eventId)
         {
-            var insights = GetInsights() ?? new Insights { Id = 1 };
+            var insights = (await GetInsights().ConfigureAwait(false)) ?? new Insights { Id = 1 };
             insights.LatestPostcrossingEventId = eventId;
 
             using var repository = _repositoryService.GetRepository();
 
-            repository.Upsert(insights, PostcrossingTrackerConstants.TrackerInsightsCollectionName);
+            await repository.UpsertAsync(insights, PostcrossingTrackerConstants.TrackerInsightsCollectionName).ConfigureAwait(false);
         }
 
-        private Insights GetInsights()
+        private async Task<Insights> GetInsights()
         {
             using var repository = _repositoryService.GetRepository();
 
-            return repository.FirstOrDefault<Insights>("1 = 1", PostcrossingTrackerConstants.TrackerInsightsCollectionName);
+            return await repository.FirstOrDefaultAsync<Insights>("1 = 1", PostcrossingTrackerConstants.TrackerInsightsCollectionName).ConfigureAwait(false);
         }
     }
 }

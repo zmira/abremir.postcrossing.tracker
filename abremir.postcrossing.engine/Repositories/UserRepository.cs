@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using abremir.postcrossing.engine.Assets;
 using abremir.postcrossing.engine.Extensions;
 using abremir.postcrossing.engine.Models;
 using abremir.postcrossing.engine.Services;
-using LiteDB;
+using LiteDB.Async;
 
 namespace abremir.postcrossing.engine.Repositories
 {
@@ -13,7 +14,7 @@ namespace abremir.postcrossing.engine.Repositories
     {
         private readonly IRepositoryService _repositoryService = repositoryService;
 
-        public User Add(User user)
+        public async Task<User> Add(User user)
         {
             if (user == null
                 || string.IsNullOrWhiteSpace(user.Name)
@@ -25,38 +26,34 @@ namespace abremir.postcrossing.engine.Repositories
 
             using var repository = _repositoryService.GetRepository();
 
-            repository.Insert(user, PostcrossingTrackerConstants.UserCollectionName);
+            await repository.InsertAsync(user, PostcrossingTrackerConstants.UserCollectionName).ConfigureAwait(false);
 
             return user;
         }
 
-        public IEnumerable<User> All()
+        public async Task<IEnumerable<User>> All()
         {
             using var repository = _repositoryService.GetRepository();
 
-            return GetQueryable(repository)
-                .ToList();
+            return await GetQueryable(repository).ToListAsync().ConfigureAwait(false);
         }
 
-        public User Get(Expression<Func<User, bool>> predicate)
+        public async Task<User> Get(Expression<Func<User, bool>> predicate)
         {
             using var repository = _repositoryService.GetRepository();
 
-            return GetQueryable(repository)
+            return await GetQueryable(repository)
                 .Where(predicate)
-                .FirstOrDefault();
+                .FirstOrDefaultAsync().ConfigureAwait(false);
         }
 
-        public User GetOrAdd(User user)
+        public async Task<User> GetOrAdd(User user)
         {
-            return Get(userModel => userModel.Name == user.Name) ?? Add(user);
+            return await Get(userModel => userModel.Name == user.Name).ConfigureAwait(false) ?? await Add(user).ConfigureAwait(false);
         }
 
-        private static ILiteQueryable<User> GetQueryable(ILiteRepository repository)
-        {
-            return repository
+        private static ILiteQueryableAsync<User> GetQueryable(ILiteRepositoryAsync repository) => repository
                 .Query<User>(PostcrossingTrackerConstants.UserCollectionName)
                 .IncludeAll();
-        }
     }
 }

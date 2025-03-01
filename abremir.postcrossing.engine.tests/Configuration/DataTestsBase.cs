@@ -10,7 +10,7 @@ namespace abremir.postcrossing.engine.tests.Configuration
 
         private static void ResetDatabase()
         {
-            (MemoryRepositoryService as ITestRepositoryService)?.ResetDatabase();
+            (MemoryRepositoryService as IMemoryRepositoryService)?.ResetDatabase();
         }
 
         [TestInitialize]

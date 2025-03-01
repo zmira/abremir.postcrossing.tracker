@@ -4,7 +4,7 @@ using LiteDB.Engine;
 
 namespace abremir.postcrossing.engine.tests.Configuration
 {
-    public class TestRepositoryService : IRepositoryService, ITestRepositoryService
+    public class TestRepositoryService : IRepositoryService, IMemoryRepositoryService
     {
         private TempStream _tempStream;
 

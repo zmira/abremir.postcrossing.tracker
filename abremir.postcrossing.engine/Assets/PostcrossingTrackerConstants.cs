@@ -7,6 +7,7 @@
         public static readonly string[] PostcrossingLiveEventsPathSegments = ["liveEvents", "getLast"];
         public const string PostcrossingLiveEventsQueryParameter = "lastEventId";
 
+        public const string PostcrossingTrackerDatabaseFolder = "data";
         public const string PostcrossingTrackerDatabaseFilename = "postcrossing-tracker.litedb";
 
         public const string EventCollectionName = "event";

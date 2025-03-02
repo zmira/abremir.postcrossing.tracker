@@ -15,7 +15,7 @@ using Timer = System.Timers.Timer;
 
 namespace abremir.postcrossing.tracker.ViewModels
 {
-    public class MainWindowViewModel : ViewModelBase
+    public class MainViewModel : ViewModelBase
     {
         public static ObservableCollection<Send> PostcrossingEventsSend { get; } = [.. new List<Send>()];
         public static ObservableCollection<Register> PostcrossingEventsRegister { get; } = [.. new List<Register>()];
@@ -30,7 +30,7 @@ namespace abremir.postcrossing.tracker.ViewModels
 
         private Timer _timer;
 
-        public MainWindowViewModel(
+        public MainViewModel(
             ToggleButton persistToggle,
             ToggleButton trackingToggle,
             ProgressRing progressRing,

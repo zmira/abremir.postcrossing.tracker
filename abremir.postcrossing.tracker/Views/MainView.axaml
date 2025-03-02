@@ -1,16 +1,23 @@
-﻿<Window
-    x:Class="abremir.postcrossing.tracker.MainWindow"
+﻿<UserControl
+    x:Class="abremir.postcrossing.tracker.Views.MainView"
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:progRing="clr-namespace:AvaloniaProgressRing;assembly=AvaloniaProgressRing"
-    Title="Postcrossing Tracker"
-    Padding="5"
+    xmlns:vm="clr-namespace:abremir.postcrossing.tracker.ViewModels"
     d:DesignHeight="450"
     d:DesignWidth="800"
-    Icon="/Assets/postcrossing.ico"
+    x:DataType="vm:MainViewModel"
     mc:Ignorable="d">
+
+    <Design.DataContext>
+        <!--
+            This only sets the DataContext for the previewer in an IDE,
+            to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs)
+        -->
+        <vm:MainViewModel />
+    </Design.DataContext>
 
     <Border
         Padding="5"
@@ -157,4 +164,4 @@
 
         </Grid>
     </Border>
-</Window>
+</UserControl>

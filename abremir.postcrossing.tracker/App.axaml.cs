@@ -1,11 +1,12 @@
-﻿using Avalonia;
+﻿using abremir.postcrossing.tracker.Views;
+using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace abremir.postcrossing.tracker
 {
-    public class App : Application
+    public partial class App : Application
     {
         public App()
         {
@@ -26,6 +27,10 @@ namespace abremir.postcrossing.tracker
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
                 desktop.MainWindow = new MainWindow();
+            }
+            else if (ApplicationLifetime is ISingleViewApplicationLifetime singleViewPlatform)
+            {
+                singleViewPlatform.MainView = new MainView();
             }
 
             base.OnFrameworkInitializationCompleted();

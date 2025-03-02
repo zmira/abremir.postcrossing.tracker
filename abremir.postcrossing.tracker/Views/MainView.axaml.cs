@@ -1,31 +1,21 @@
 ﻿using abremir.postcrossing.tracker.ViewModels;
-using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
-using Avalonia.Markup.Xaml;
 using AvaloniaProgressRing;
 
-namespace abremir.postcrossing.tracker
+namespace abremir.postcrossing.tracker.Views
 {
-    public class MainWindow : Window
+    public partial class MainView : UserControl
     {
-        public MainWindow()
+        public MainView()
         {
             InitializeComponent();
-#if DEBUG
-            this.AttachDevTools();
-#endif
 
-            DataContext = new MainWindowViewModel(
+            DataContext = new MainViewModel(
                 this.FindControl<ToggleButton>("PersistData"),
                 this.FindControl<ToggleButton>("StartTracking"),
                 this.FindControl<ProgressRing>("ProgressRing"),
                 this.FindControl<Slider>("RefreshFrequency"));
-        }
-
-        private void InitializeComponent()
-        {
-            AvaloniaXamlLoader.Load(this);
         }
     }
 }

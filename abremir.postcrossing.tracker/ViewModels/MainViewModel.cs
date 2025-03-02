@@ -30,6 +30,8 @@ namespace abremir.postcrossing.tracker.ViewModels
 
         private Timer _timer;
 
+        public MainViewModel() { }
+
         public MainViewModel(
             ToggleButton persistToggle,
             ToggleButton trackingToggle,

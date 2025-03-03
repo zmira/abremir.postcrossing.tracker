@@ -66,16 +66,18 @@
                             BorderThickness="1"
                             CornerRadius="4">
 
-                            <TextBlock>
-                                <TextBlock.Text>
-                                    <MultiBinding Mode="OneWay" StringFormat="{}{0}/{1} sending to {2}">
-                                        <Binding Mode="OneWay" Path="User.Name" />
-                                        <Binding Mode="OneWay" Path="User.Country.Name" />
-                                        <Binding Mode="OneWay" Path="ToCountry.Name" />
-                                    </MultiBinding>
-                                </TextBlock.Text>
-                            </TextBlock>
-
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{Binding User.Name}" />
+                                <Svg
+                                    Width="50"
+                                    Height="15"
+                                    Path="{Binding User.Country.Flag}" />
+                                <TextBlock Text="is sending a postcard to" />
+                                <Svg
+                                    Width="50"
+                                    Height="15"
+                                    Path="{Binding ToCountry.Flag}" />
+                            </StackPanel>
                         </Border>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
@@ -102,17 +104,21 @@
                             BorderThickness="1"
                             CornerRadius="4">
 
-                            <TextBlock>
-                                <TextBlock.Text>
-                                    <MultiBinding Mode="OneWay" StringFormat="{}{0}/{1} registered {2} from {3}/{4}">
-                                        <Binding Mode="OneWay" Path="User.Name" />
-                                        <Binding Mode="OneWay" Path="User.Country.Name" />
-                                        <Binding Mode="OneWay" Path="Postcard.PostcardId" />
-                                        <Binding Mode="OneWay" Path="FromUser.Name" />
-                                        <Binding Mode="OneWay" Path="FromUser.Country.Name" />
-                                    </MultiBinding>
-                                </TextBlock.Text>
-                            </TextBlock>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{Binding User.Name}" />
+                                <Svg
+                                    Width="50"
+                                    Height="15"
+                                    Path="{Binding User.Country.Flag}" />
+                                <TextBlock Text="registered" />
+                                <TextBlock Padding="5,0,5,0" Text="{Binding Postcard.PostcardId}" />
+                                <TextBlock Text="from" />
+                                <TextBlock Text="{Binding FromUser.Name}" />
+                                <Svg
+                                    Width="50"
+                                    Height="15"
+                                    Path="{Binding FromUser.Country.Flag}" />
+                            </StackPanel>
 
                         </Border>
                     </DataTemplate>

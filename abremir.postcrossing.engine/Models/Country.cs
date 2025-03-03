@@ -12,5 +12,8 @@ namespace abremir.postcrossing.engine.Models
 
         [BsonIgnore]
         public string Link => $"/country/{Code}";
+
+        [BsonIgnore]
+        public string Flag => $"/Assets/flags/{Code.ToLower()}.svg";
     }
 }
